@@ -75,6 +75,8 @@ text::replace_inside_markers() {
     local new_content=$3
     shift 3
 
+    new_content=$(echo -e "$new_content")
+
     # Use awk to replace content between markers, ensuring the entire line matches the markers
     # Pass the new content through the environment because awk can't handle newlines in arguments
     content=$new_content awk -v start="$start_marker" -v end="$end_marker" '

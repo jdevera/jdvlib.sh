@@ -71,7 +71,7 @@ EOF
         After content
 EOF
 
-    local new_content="# This is a new comment\nAnd a second line"
+    local new_content="# This is a new comment"
     run text::replace_inside_markers \
         '#--SETUP-START--' \
         '#--SETUP-END--' \
@@ -81,7 +81,6 @@ EOF
         Previous content
         #--SETUP-START--
         # This is a new comment
-        And a second line
         #--SETUP-END--
         After content
 EOF
@@ -166,6 +165,7 @@ EOF
 EOF
         )"
 }
+
 
 @test "test_replace_inside_markers_multiline" {
     local file="$BATS_TEST_TMPDIR/test_replace_inside_markers_multiline.txt"
