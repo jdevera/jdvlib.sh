@@ -16,5 +16,5 @@ teardown() {
 @test "test_user_is_root" {
     skip_unless_docker_container
     run user::is_root
-    assert_failure
+    assert_success
 }

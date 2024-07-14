@@ -43,8 +43,12 @@ cat3() {
     cat "$@" >&3
 }
 
+is_docker_container() {
+    [[ -f /.dockerenv ]]
+}
+
 skip_unless_docker_container() {
-    grep -q docker /proc/1/cgroup 2>/dev/null || skip "This test must be run in a docker container"
+    is_docker_container || skip "This test must be run in a docker container"
 }
 
 register_teardown() {
