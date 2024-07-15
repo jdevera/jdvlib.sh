@@ -5,6 +5,7 @@ __JDVLIB_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 pushd "$__JDVLIB_PATH" &> /dev/null || exit 1
 
+source _meta.sh
 source ansi.sh
 source args.sh
 source code.sh

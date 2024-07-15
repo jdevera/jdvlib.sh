@@ -5,6 +5,17 @@ Functions related to ANSI escape codes. This code is vendored in from
 [Tyler Akins' ansi project](https://github.com/fidian/ansi).
 jdvlib:doc
 
+# jdvlib: --- BEGIN IMPORTS ---
+#
+# NOTICE: This block exists so the library is usable when not compiled into a
+# single file.  When compiled, this block is commented out since all of the
+# files are included in the compiled file.
+#
+# shellcheck source=./_meta.sh
+[[ ${__jdvlib_compiling:-'0'} == '0' ]] && \
+    source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/_meta.sh"
+
+
 #
 # ANSI code generator
 #
@@ -1659,6 +1670,6 @@ ansi::ansi() {
 }
 
 # Run if not sourced
-if [[ "$0" == "${BASH_SOURCE[0]}" ]]; then
+if meta::module_is_running; then
     ansi::ansi "$@" || exit $?
 fi

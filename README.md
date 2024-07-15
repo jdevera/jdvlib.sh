@@ -21,6 +21,18 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/jdvlib.sh
 ## Modules
 
 <!-- MODULES:START -->
+### Module `_meta`
+
+Functions that support the library.
+This module is the basis for imports, so there should never be an import of this file.
+
+#### Functions
+
+- `meta::import`
+- `meta::is_compiling`
+- `meta::lib_is_compiled`
+- `meta::module_is_running`
+
 ### Module `ansi`
 
 Functions related to ANSI escape codes. This code is vendored in from

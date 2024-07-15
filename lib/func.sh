@@ -64,6 +64,6 @@ func::list_functions_in_file() {
     fi
 }
 
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+if meta::module_is_running; then
     func::list_functions_in_file "$1"
 fi
