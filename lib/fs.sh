@@ -23,9 +23,17 @@ meta::import ui
 fs::is_owned_by_user() {
     local file=$1
     local user=$2
-    [[ $(stat -c %U "$file") == "$user" ]]
-}
+    local -a stat_args=()
+    if sys::is_linux; then
+        stat_args+=(-c %U)
+    elif sys::is_macos; then
+        stat_args+=(-f %Su)
+    else
+        ui::die "Unsupported OS"
+    fi
+    [[ $(stat "${stat_args[@]}" "$file") == "$user" ]]
 
+}
 
 fs::ensure_file_exists() {
     local file=$1

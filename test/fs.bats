@@ -13,6 +13,17 @@ teardown() {
     _run_teardown_functions
 }
 
+@test "test_is_owned_by_user" {
+    user=$(whoami)
+    file="$BATS_TEST_TMPDIR/test_is_owned_by_user"
+    touch "$file"
+    run fs::is_owned_by_user "$file" "$user"
+    assert_success
+
+    run fs::is_owned_by_user "$file" "non_existent_user"
+    assert_failure
+}
+
 @test "test_can_user_write_to_dir" {
     skip_unless_docker_container
 
