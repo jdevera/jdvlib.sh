@@ -58,6 +58,10 @@ skip_unless_docker_container() {
     is_docker_container || skip "This test must be run in a docker container"
 }
 
+skip_unless_root() {
+    [[ $EUID -eq 0 ]] || skip "This test must be run as root"
+}
+
 register_teardown() {
     local function=$1
     declare -ga __TEARDOWN_FUNCTIONS

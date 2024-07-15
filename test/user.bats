@@ -14,27 +14,27 @@ teardown() {
 
 
 @test "test_user_is_root" {
-    skip_unless_docker_container
+    skip_unless_root
     run user::is_root
     assert_success
 }
 
 @test "test_ensure_root" {
-    skip_unless_docker_container
+    skip_unless_root
     run user::ensure_root
     assert_success
     assert_output ""
 }
 
 @test "test_ensure_root_reassured" {
-    skip_unless_docker_container
+    skip_unless_root
     reassure=true run_stripped user::ensure_root
     assert_success
     assert_output "✔ Running as root"
 }
 
 @test "test_user_exists" {
-    skip_unless_docker_container
+    skip_unless_root
     run user::exists root
     assert_success
 
@@ -43,7 +43,7 @@ teardown() {
 }
 
 @test "test_ensure_exists" {
-    skip_unless_docker_container
+    skip_unless_root
     run user::ensure_exists root
     assert_success
     assert_output ""
@@ -54,7 +54,7 @@ teardown() {
 }
 
 @test "test_group_exists" {
-    skip_unless_docker_container
+    skip_unless_root
     run user::group_exists root
     assert_success
 
@@ -69,7 +69,7 @@ teardown() {
 }
 
 @test "test_is_in_group" {
-    skip_unless_docker_container
+    skip_unless_root
     run user::is_in_group root root
     assert_success
 
@@ -87,7 +87,7 @@ teardown() {
 }
 
 @test "test_add_to_groups" {
-    skip_unless_docker_container
+    skip_unless_root
     group="test_group"
 
     groupadd $group
@@ -104,7 +104,7 @@ teardown() {
 }
 
 @test "test_create_user" {
-    skip_unless_docker_container
+    skip_unless_root
 
     user="test_user"
     run user::exists $user

@@ -61,7 +61,7 @@ teardown() {
 
 # bats test_tags=needs_docker
 @test "test_can_user_write_to_dir" {
-    skip_unless_docker_container
+    skip_unless_root
 
     user_name='test_writer'
 
@@ -94,7 +94,6 @@ teardown() {
 
     # mock mountpoint
     mountpoint() {
-        puts "# mountpoint $*"
         assert_equal "$1" "-q"
         path=$2
         if [[ $path == "$fake_mount" ]]; then

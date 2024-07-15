@@ -77,7 +77,7 @@ backup_path() {
 }
 
 @test "test_is_debian" {
-    skip_unless_docker_container
+    skip_unless_root
 
     if [[ -f /etc/debian_version ]]; then
         mv /etc/debian_version /etc/debian_version.bak
@@ -95,7 +95,7 @@ backup_path() {
 }
 
 @test "test_ensure_debian" {
-    skip_unless_docker_container
+    skip_unless_root
 
     if [[ -f /etc/debian_version ]]; then
         mv /etc/debian_version /etc/debian_version.bak
@@ -292,7 +292,7 @@ fake_uname() {
 }
 
 @test "test_is_docker_host" {
-    skip_unless_docker_container
+    skip_unless_root
     user::group_exists docker && skip "Docker group already exists. This could break things."
 
     run sys::is_docker_host
@@ -332,7 +332,7 @@ fake_uname() {
 }
 
 @test "test_run_as_root" {
-    skip_unless_docker_container
+    skip_unless_root
 
     user=test_user
 
