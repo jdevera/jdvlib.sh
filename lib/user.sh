@@ -14,6 +14,7 @@ jdvlib:doc
 [[ ${__jdvlib_compiling:-'0'} == '0' ]] && \
     source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/_meta.sh"
 
+meta::import func
 meta::import ui
 
 # jdvlib: --- END IMPORTS ---
@@ -25,10 +26,9 @@ user::is_root() {
 
 user::ensure_root() {
     local reason=$1
-    if ! user::is_root; then
-        ui::die "This script must be run as root $reason"
-    fi
-    ui::reassure "Running as root"
+    func::ensure user::is_root \
+        "This script must be run as root $reason" \
+        "Running as root"
 }
 
 user::exists() {
@@ -38,10 +38,10 @@ user::exists() {
 
 user::ensure_exists() {
     local user=$1
-    if ! user::exists "$user"; then
-        ui::die "User $user does not exist"
-    fi
-    ui::reassure "User $user exists"
+    func::ensure user::exists \
+        "User $user does not exist" \
+        "User $user exists" \
+        "$user"
 }
 
 user::group_exists() {
@@ -56,10 +56,10 @@ user::group_exists() {
 
 user::ensure_group_exists() {
     local group=$1
-    if ! group::group_exists "$group"; then
-        ui::die "Group $group does not exist"
-    fi
-    ui::reassure "Group $group exists"
+    func::ensure user::group_exists \
+        "Group $group does not exist" \
+        "Group $group exists" \
+        "$group"
 }
 
 user::is_in_group() {
@@ -71,10 +71,10 @@ user::is_in_group() {
 user::ensure_in_group() {
     local user=$1
     local group=$2
-    if ! user::is_in_group "$user" "$group"; then
-        ui::die "User $user is not in group $group"
-    fi
-    ui::reassure "User $user is in group $group"
+    func::ensure user::is_in_group \
+        "User $user is not in group $group" \
+        "User $user is in group $group" \
+        "$user" "$group"
 }
 
 user::add_to_groups() {
