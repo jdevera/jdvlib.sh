@@ -1,6 +1,11 @@
-.PHONY: all build clean check test checkdist docker
+.PHONY: all build clean \
+        check checkdist \
+        docker \
+        test testdocker testdev testci \
+        readme
+
 # Default target
-all: build
+all: check test build checkdist
 
 # Build target
 build: build/jdvlib.sh
@@ -20,7 +25,7 @@ clean:
 	@echo "Cleaning up..."
 	@rm -rfv build
 
-check: $(LIB_FILES) compile.sh test/test_helper/common_setup.bash
+check:
 	shellcheck compile.sh
 	shellcheck test/test_helper/common_setup.bash
 	shellcheck test/*.bats
@@ -31,13 +36,13 @@ check: $(LIB_FILES) compile.sh test/test_helper/common_setup.bash
 checkdist: build/jdvlib.sh
 	shellcheck build/jdvlib.sh
 
-testlocal: $(LIB_FILES) $(TESTS)
+test:
 	@./test/bats/bin/bats test
 
 docker: $(LIB_FILES) $(TEMPLATES) Dockerfile
 	@docker build -t jdvlib .
 
-test:
+testdocker:
 	@docker run -it --rm jdvlib
 
 testdev:
