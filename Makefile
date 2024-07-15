@@ -1,4 +1,4 @@
-.PHONY: all build clean check test checkdist
+.PHONY: all build clean check test checkdist docker
 # Default target
 all: build
 
@@ -8,6 +8,8 @@ build: build/jdvlib.sh
 # Specify dependencies for build/jdvlib.sh
 LIB_FILES := $(wildcard lib/*)
 TEMPLATES := $(wildcard templates/*)
+# all files under the test directory, at any level
+TESTS := $(wildcard test/**/*)
 
 build/jdvlib.sh: $(LIB_FILES) $(TEMPLATES) compile.sh
 	@mkdir -p build
@@ -28,5 +30,14 @@ check: $(LIB_FILES) compile.sh
 checkdist: build/jdvlib.sh
 	shellcheck build/jdvlib.sh
 
-test: $(LIB_FILES)
+testlocal: $(LIB_FILES) $(TESTS)
 	@./test/bats/bin/bats test
+
+docker: $(LIB_FILES) $(TEMPLATES) Dockerfile
+	@docker build -t jdvlib .
+
+test:
+	@docker run -it --rm jdvlib
+
+testdev:
+	@docker run -it --rm -v $(PWD):/app jdvlib $(MODULE)

@@ -8,4 +8,4 @@ RUN apt-get update && apt-get install -y \
     make
 
 ENV TERM=xterm-256color
-ENTRYPOINT ["make", "test"]
+ENTRYPOINT ["./test.sh"]
