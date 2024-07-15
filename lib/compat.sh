@@ -35,6 +35,7 @@ meta::import text
 
 
 deco_message() {
+    ui::deprecate "deco_message" "ui::deco_message"
     ui::deco_message "$@"
 }
 
