@@ -16,6 +16,7 @@ jdvlib:doc
 
 meta::import sys
 meta::import ui
+meta::import func
 
 # jdvlib: --- END IMPORTS ---
 
@@ -75,10 +76,10 @@ fs::is_in_remote_mount() {
 
 fs::ensure_in_remote_mount() {
     local path=$1
-    if ! fs::is_in_remote_mount "$path"; then
-        ui::die "Path $path is not in a remote mount"
-    fi
-    ui::reassure "Path $path is in a remote mount"
+    func::ensure fs::is_in_remote_mount \
+        "Path $path is not in a remote mount" \
+        "Path $path is in a remote mount" \
+        "$path"
 }
 
 fs::can_user_write_to_dir() {
