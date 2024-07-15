@@ -41,3 +41,6 @@ test:
 
 testdev:
 	@docker run -it --rm -v $(PWD):/app jdvlib $(MODULE)
+
+readme:
+	@./compile.sh readme
