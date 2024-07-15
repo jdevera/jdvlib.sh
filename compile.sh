@@ -158,9 +158,11 @@ library_metadata() {
 
 target_lib() {
     set_version
-    header_file=./templates/header.sh
+    local header_file=./templates/header.sh
+    local footer_file=./templates/footer.sh
     DEST=${DEST:-'-'}
     fs::ensure_file_exists "$header_file"
+    fs::ensure_file_exists "$footer_file"
     source() {
         source_override_attach_code "$@"
     }
@@ -171,6 +173,7 @@ target_lib() {
 
     # Since "source" is overriden, calling it with builtin to make sure this is the real one
     command source ./lib/lib.sh
+    out "$footer_file"
 }
 
 get_module_doc() {
