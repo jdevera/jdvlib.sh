@@ -16,6 +16,7 @@ jdvlib:doc
 
 meta::import ui
 meta::import func
+meta::import args
 
 # jdvlib: --- END IMPORTS ---
 
@@ -25,6 +26,8 @@ meta::import func
 # @exitcode 0 If the command is available
 # @exitcode 1 If the command is not available
 sys::has_command() {
+    args::ensure_num_args 1 \
+        'echo sys::has_command takes 1 arg' "$@"
     command -v "$1" &>/dev/null
 }
 
@@ -43,7 +46,7 @@ sys::ensure_has_commands() {
         fi
     done
     if [[ ${#missing[@]} -gt 0 ]]; then
-        ui::die "This script requires the following commands but they are not installed: ${missing[*]}"
+        ui::die "These commands are required but not found: ${missing[*]}"
     fi
 }
 
@@ -56,9 +59,10 @@ sys::is_in_path() {
 # @arg $1 string The directory to check
 sys::ensure_in_path() {
     local dir=$1
-    func::ensure sys::is_in_path "$dir" \
+    func::ensure sys::is_in_path \
         "The directory $dir is not in the PATH" \
-        "The directory $dir is in the PATH"
+        "The directory $dir is in the PATH" \
+        "$dir"
 }
 
 sys::is_debian() {
@@ -67,7 +71,7 @@ sys::is_debian() {
 
 sys::ensure_debian() {
     func::ensure sys::is_debian \
-        "This script is intended to run on a Debian-based system" \
+        "This is intended to run on a Debian-based system" \
         "This is a Debian-based system"
 }
 
@@ -114,13 +118,13 @@ sys::is_macos() {
 
 sys::ensure_macos() {
     func::ensure sys::is_macos \
-        "This script is intended to run on a macOS system" \
+        "This is intended to run on a macOS system" \
         "This is a macOS system"
 }
 
 sys::ensure_linux() {
     func::ensure sys::is_linux \
-        "This script is intended to run on a Linux system" \
+        "This is intended to run on a Linux system" \
         "This is a Linux system"
 }
 
@@ -128,7 +132,9 @@ sys::run_as() {
     local user=$1
     shift
     local -a command=()
-    if user::is_root; then
+    if [[ $USER == "$user" ]]; then
+        command=("$@")
+    elif user::is_root; then
         command=(su - "$user" -c "$*")
     else
         command=(sudo -u "$user" "$@")
@@ -142,6 +148,6 @@ sys::is_docker_host() {
 
 sys::ensure_docker_host() {
     func::ensure sys::is_docker_host \
-        "This script is intended to run on a Docker host" \
+        "This is intended to run on a Docker host" \
         "This is a Docker host"
 }

@@ -72,7 +72,7 @@ _run_teardown_functions() {
     # run the functions in reverse order:
     for ((i=${#functions[@]}-1; i>=0; i--)); do
         function=${functions[$i]}
-        puts "# Running teardown function: $function"
+        log_teardown "$function"
         $function
     done
 }
@@ -116,4 +116,93 @@ run_light() {
     status=$?
     output=$(<"$BATS_TEST_TMPDIR/run_light.out")
     return $status
+}
+
+test_ensure_function() {
+    local ensure_function=$1
+    # if ensure is not in the name, issue a warning
+    if [[ $ensure_function != *ensure* ]]; then
+        puts "# WARNING: test_ensure_function is intended to be used with ensure functions"
+    fi
+    shift
+    local expected_failure=
+    local expected_reassurance=
+    local run_success=false
+    local run_failure=false
+    local -a success_args=()
+    local -a failure_args=()
+    local mode=
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --success)
+                mode=success
+                expected_reassurance=$2
+                run_success=true
+                shift
+                ;;
+            --failure)
+                mode=failure
+                expected_failure=$2
+                run_failure=true
+                shift
+                ;;
+            *)
+                if [[ $mode == success ]]; then
+                    success_args+=("$1")
+                elif [[ $mode == failure ]]; then
+                    failure_args+=("$1")
+                else
+                    ui::die "unknown argument $1"
+                fi
+                ;;
+        esac
+        shift
+    done
+
+    # First the success case (without reassurance)
+    if $run_success; then
+        puts "# Running success case for $ensure_function with args: ${success_args[*]}"
+        run_stripped "$ensure_function" "${success_args[@]}"
+        assert_success
+        assert_output ""
+
+        # Then the success case (with reassurance)
+        if [[ -n $expected_reassurance ]]; then
+            puts "# Running success case for $ensure_function with reassurance with args: ${success_args[*]}"
+            reassure=true run_stripped "$ensure_function" "${success_args[@]}"
+            assert_success
+            assert_output "✔ $expected_reassurance"
+        fi
+    fi
+
+    # Finally, the failure case
+    if $run_failure; then
+        puts "# Running failure case for $ensure_function with args: ${failure_args[*]}"
+        run "$ensure_function" "${failure_args[@]}"
+        assert_failure
+        strip_ansi_from_output
+        assert_output "✗ $expected_failure"
+    fi
+}
+
+assert_death() {
+    local error_message=$1
+    assert_failure
+    strip_ansi_from_output
+    assert_output "✗ $error_message"
+}
+
+log_mock_call() {
+    local name=$1
+    local answer=$2
+    shift 2
+    puts "# 🤡 Called mocked $name $* -> $answer"
+}
+
+log_teardown() {
+    puts "# 🧼 Running teardown step: $1"
+}
+
+log_step() {
+    puts "# ► $*"
 }

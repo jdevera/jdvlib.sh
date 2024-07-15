@@ -64,7 +64,7 @@ args::ensure_num_args_between() {
     shift 3
     local num_args=$#
     if [[ $num_args -lt $min || ($max -ne -1 && $num_args -gt $max) ]]; then
-        "$usage_function"
+        $usage_function
         exit 1
     fi
 }

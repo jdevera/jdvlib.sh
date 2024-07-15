@@ -59,6 +59,7 @@ teardown() {
     assert_failure
 }
 
+# bats test_tags=needs_docker
 @test "test_can_user_write_to_dir" {
     skip_unless_docker_container
 
