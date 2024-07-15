@@ -6,6 +6,7 @@ set -o pipefail
 
 __JDVLIB_PROJECT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 __JDVLIB_DIR=$__JDVLIB_PROJECT_DIR/lib
+__JDVLIB_VERSION="0.0.0"
 
 # shellcheck source=./lib/_meta.sh
 source "$__JDVLIB_DIR/_meta.sh"
@@ -52,6 +53,13 @@ TARGETS:
 OPTIONS:
     -h, --help    Show this help message and exit
 EOF
+}
+
+set_version() {
+    local git_version
+    declare -g __JDVLIB_VERSION
+    git_version=$(git describe --tags --long | awk -F'-' '{print $1"-"$2}')
+    __JDVLIB_VERSION=$git_version
 }
 
 # Print to the destination file or stdout
@@ -134,7 +142,22 @@ source_override_attach_code() {
     } | out
 }
 
+library_metadata() {
+    local major minor patch commits
+    echo "# Version: ${__JDVLIB_VERSION}"
+    echo "#"
+
+    echo "__JDVLIB_VERSION='${__JDVLIB_VERSION}'"
+    # Version has the format major.minor.patch-commits
+    IFS=. read -r major minor patch commits <<<"${__JDVLIB_VERSION/-/.}"
+
+    echo "__JDVLIB_VERSION_PARTS=( $major $minor $patch $commits)"
+    echo "__JDVLIB_GIT_HASH='$(git rev-parse HEAD)'"
+    echo "__JDVLIB_BUILD_DATE='$(date -u +'%Y-%m-%d')'"
+}
+
 target_lib() {
+    set_version
     header_file=./templates/header.sh
     DEST=${DEST:-'-'}
     fs::ensure_file_exists "$header_file"
@@ -143,6 +166,8 @@ target_lib() {
     }
     init_dest_file --truncate
     out "$header_file"
+    library_metadata | out
+
 
     # Since "source" is overriden, calling it with builtin to make sure this is the real one
     command source ./lib/lib.sh
