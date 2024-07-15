@@ -63,7 +63,9 @@ _run_teardown_functions() {
     local functions=("${__TEARDOWN_FUNCTIONS[@]}")
     __TEARDOWN_FUNCTIONS=()
     local function
-    for function in "${functions[@]}"; do
+    # run the functions in reverse order:
+    for ((i=${#functions[@]}-1; i>=0; i--)); do
+        function=${functions[$i]}
         puts "# Running teardown function: $function"
         $function
     done
