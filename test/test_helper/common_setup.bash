@@ -25,11 +25,13 @@ strip_ansi() {
     echo "$1" | sed -E 's/\x1B\[[0-9;]*[JKmsu]//g'
 }
 strip_ansi_from_output() {
+    declare -g output lines
+
     output=$(strip_ansi "$output")
 
     # replace the lines array with the stripped lines
     for i in "${!lines[@]}"; do
-        lines[$i]=$(strip_ansi "${lines[$i]}")
+        lines[i]=$(strip_ansi "${lines[$i]}")
     done
 
 }
@@ -50,6 +52,7 @@ cat3() {
 is_docker_container() {
     [[ -f /.dockerenv ]]
 }
+
 
 skip_unless_docker_container() {
     is_docker_container || skip "This test must be run in a docker container"

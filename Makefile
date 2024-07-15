@@ -20,12 +20,13 @@ clean:
 	@echo "Cleaning up..."
 	@rm -rfv build
 
-check: $(LIB_FILES) compile.sh
-	@shellcheck compile.sh
-	@shellcheck --source-path=lib \
-	            --check-sourced \
-	            --external-sources \
-	            lib/lib.sh
+check: $(LIB_FILES) compile.sh test/test_helper/common_setup.bash
+	shellcheck compile.sh
+	shellcheck test/test_helper/common_setup.bash
+	shellcheck test/*.bats
+	shellcheck test/scripts/*.sh
+	shellcheck templates/*.sh
+	shellcheck --check-sourced lib/lib.sh
 
 checkdist: build/jdvlib.sh
 	shellcheck build/jdvlib.sh
@@ -44,3 +45,6 @@ testdev:
 
 readme:
 	@./compile.sh readme
+
+testci:
+	echo no

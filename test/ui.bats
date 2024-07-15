@@ -112,7 +112,9 @@ teardown() {
 
 @test 'test_ask_preloaded_value' {
     source args.sh
-    answer="preloaded"
+
+    # shellcheck disable=SC2030
+    export answer="preloaded"
     run ui::ask "question" answer "default"
 
     assert_success
@@ -131,5 +133,6 @@ teardown() {
     disable_read_builtin
     ui::ask "question" answer "default"
     assert_equal "$?" 0
+    # shellcheck disable=SC2031
     assert_equal "$answer" "mocked"
 }

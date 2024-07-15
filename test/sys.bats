@@ -225,12 +225,11 @@ fake_uname() {
     export -f uname
     register_teardown "unset -f uname"
 
-    # shellcheck disable=SC2031 # It's okay to be changed within the test subshell
+    # shellcheck disable=SC2030,SC2031 # It's okay to be changed within the test subshell
     export __test_uname_s_answer=Linux
     run sys::is_linux
     assert_success
 
-    # shellcheck disable=SC2031 # It's okay to be changed within the test subshell
     export __test_uname_s_answer=Darwin
     run sys::is_linux
     assert_failure
@@ -248,12 +247,11 @@ fake_uname() {
     export -f uname
     register_teardown "unset -f uname"
 
-    # shellcheck disable=SC2031 # It's okay to be changed within the test subshell
+    # shellcheck disable=SC2030,SC2031 # It's okay to be changed within the test subshell
     export __test_uname_s_answer=Linux
     run sys::is_macos
     assert_failure
 
-    # shellcheck disable=SC2031 # It's okay to be changed within the test subshell
     export __test_uname_s_answer=Darwin
     run sys::is_macos
     assert_success

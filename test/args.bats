@@ -67,7 +67,7 @@ usage_function() {
 num_args_simulator() {
     local expected=$1
     shift
-    args::ensure_num_args $expected usage_function "$@"
+    args::ensure_num_args "$expected" usage_function "$@"
     echo "remainder"
 }
 
@@ -97,7 +97,7 @@ num_args_between_simulator() {
     local max=$2
     shift 2
 
-    args::ensure_num_args_between $min $max usage_function "$@"
+    args::ensure_num_args_between "$min" "$max" usage_function "$@"
     echo "remainder"
 }
 
@@ -144,7 +144,7 @@ num_args_between_simulator() {
 }
 
 flag_value_simulator() {
-    args::flag_value --expected $1
+    args::flag_value --expected "$1"
 }
 
 @test "test_args_flag_value_true" {

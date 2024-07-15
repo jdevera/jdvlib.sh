@@ -44,7 +44,7 @@ meta::for_each_library_module() {
         "$action" "$file"
     }
 
-    # Since "source" is overriden, calling it with builtin to make sure this is the real one
+    # Since "source" is overridden, calling it with builtin to make sure this is the real one
     __jdvlib_compiling=1 command source "$__JDVLIB_PATH/lib.sh"
 }
 

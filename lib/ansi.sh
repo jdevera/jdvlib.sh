@@ -8,7 +8,7 @@ jdvlib:doc
 # jdvlib: --- BEGIN IMPORTS ---
 #
 # NOTICE: This block exists so the library is usable when not compiled into a
-# single file.  When compiled, this block is commented out since all of the
+# single file.  When compiled, this block is commented out since all the
 # files are included in the compiled file.
 #
 # shellcheck source=./_meta.sh
@@ -589,7 +589,7 @@ ansi::report() {
     # ansi --report-window-chars | cut -d , -f 1
     read -p "$ANSI_CSI$1" -r -N "${#2}" -s -t 1 buff
 
-    if [ "$buff" != "$2" ]; then
+    if [[ "$buff" != "$2" ]]; then
         return 1
     fi
 

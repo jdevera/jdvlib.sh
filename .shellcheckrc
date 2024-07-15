@@ -1,0 +1,29 @@
+source-path=./lib
+source-path=SCRIPTDIR
+
+# Set to true in .shellcheckrc to always allow ShellCheck to open arbitrary
+# files from 'source' statements (the way most tools do).
+
+# This option defaults to false only due to ShellCheck's origin as a remote
+# service for checking untrusted scripts.  It can safely be enabled for normal
+# development.
+external-sources=true
+
+
+# name:    avoid-nullary-conditions
+# desc:    Suggest explicitly using -n in `[ $var ]`
+# example: [ "$var" ]
+# fix:     [ -n "$var" ]
+enable=avoid-nullary-conditions
+
+# name:    require-double-brackets
+# desc:    Require [[ and warn about [ in Bash/Ksh
+# example: [ -e /etc/issue ]
+# fix:     [[ -e /etc/issue ]]
+enable=require-double-brackets
+
+# name:    add-default-case
+# desc:    Suggest adding a default case in `case` statements
+# example: case $? in 0) echo 'Success';; esac
+# fix:     case $? in 0) echo 'Success';; *) echo 'Fail' ;; esac
+enable=add-default-case

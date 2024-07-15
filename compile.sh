@@ -106,7 +106,7 @@ init_dest_file() {
 }
 
 handle_args() {
-    declare -g TARGET DEST DEST_FULL_PATH target_compiler
+    declare -g TARGET DEST target_compiler
     # Check for help:
     args::check_help_arg help "$@"
 
@@ -171,7 +171,7 @@ target_lib() {
     library_metadata | out
 
 
-    # Since "source" is overriden, calling it with builtin to make sure this is the real one
+    # Since "source" is overridden, calling it with builtin to make sure this is the real one
     command source ./lib/lib.sh
     out "$footer_file"
 }
@@ -195,8 +195,8 @@ get_module_doc() {
     if [[ $with_functions == 'true' ]]; then
         echo "#### Functions"
         echo
-        # shellcheck disable=SC2016 # We want the backticks to be literal
         local functions count
+        # shellcheck disable=SC2016 # We want the backticks to be literal
         functions=$(func::list_functions_in_file "$file" | sed 's/\(.*\)/- `\1`/')
         count=$(echo "$functions" | wc -l | awk '{print $1}')
         if [[ $count -gt 25 ]]; then
@@ -219,14 +219,13 @@ source_override_document_modules() {
 }
 
 target_doc() {
-    header_file=
     DEST=${DEST:-'-'}
     source() {
         source_override_document_modules "$@"
     }
     init_dest_file --truncate
 
-    # Since "source" is overriden, calling it with builtin to make sure this is the real one
+    # Since "source" is overridden, calling it with builtin to make sure this is the real one
     command source ./lib/lib.sh
 }
 
@@ -237,7 +236,6 @@ source_override_readme() {
 
 target_readme() {
     local README_FILE="$__JDVLIB_PROJECT_DIR/README.md"
-    header_file=
     source() {
         source_override_readme "$@"
     }

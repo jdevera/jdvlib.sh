@@ -9,7 +9,7 @@ jdvlib:doc
 # jdvlib: --- BEGIN IMPORTS ---
 #
 # NOTICE: This block exists so the library is usable when not compiled into a
-# single file.  When compiled, this block is commented out since all of the
+# single file.  When compiled, this block is commented out since all the
 # files are included in the compiled file.
 #
 # shellcheck source=./_meta.sh
@@ -174,22 +174,24 @@ is_owned_by_user() {
 
 ensure_file_exists() {
     ui::deprecate "ensure_file_exists" "fs::ensure_file_exists"
-    local verbose=$(flag_value -v "$1")
+    local verbose
+    verbose=$(flag_value -v "$1")
     [[ $verbose == true ]] && shift
     reassure=$verbose fs::ensure_file_exists "$@"
 }
 
 ensure_dir_exists() {
     ui::deprecate "ensure_dir_exists" "fs::ensure_dir_exists"
-    local verbose=$(flag_value -v "$1")
+    local verbose
+    verbose=$(flag_value -v "$1")
     [[ $verbose == true ]] && shift
     reassure=$verbose fs::ensure_dir_exists "$@"
 }
 
 ensure_var_is_set() {
     ui::deprecate "ensure_var_is_set" "env::ensure_is_set"
-
-    local verbose=$(flag_value -v "$1")
+    local verbose
+    verbose=$(flag_value -v "$1")
     [[ $verbose == true ]] && shift
     reassure=$verbose env::ensure_is_set "$@"
 }
@@ -206,7 +208,8 @@ is_in_remote_mount() {
 
 ensure_in_remote_mount() {
     ui::deprecate "ensure_in_remote_mount" "fs::ensure_in_remote_mount"
-    local verbose=$(flag_value -v "$1")
+    local verbose
+    verbose=$(flag_value -v "$1")
     [[ $verbose == true ]] && shift
 
     reassure=$verbose fs::ensure_in_remote_mount "$@"
