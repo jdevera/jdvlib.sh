@@ -19,7 +19,7 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/jdvlib.sh
 These variables affect the behaviour:
 
 * `JDVLIB_DEBUG`: Set to `true` to enable debug output. There is not a lot of this, though.
-  * Deprecation messages will include file and line of the caller.
+    * Deprecation messages will include file and line of the caller.
 * `JDVLIB_LOG_DEPRECATIONS`: Set to *something* to log deprecation messages to `~/.jdvlib-deprecations.log`.
 
 
