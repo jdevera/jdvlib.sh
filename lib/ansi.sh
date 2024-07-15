@@ -15,7 +15,7 @@ jdvlib:doc
 [[ ${__jdvlib_compiling:-'0'} == '0' ]] && \
     source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/_meta.sh"
 
-
+# jdvlib: --- END IMPORTS ---
 #
 # ANSI code generator
 #
