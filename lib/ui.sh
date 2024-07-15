@@ -72,6 +72,11 @@ ui::deprecate() {
         local caller_line=${BASH_LINENO[1]}
         message+="${caller_file}:${caller_line}: "
     fi
+    local log_deprecations=${JDVLIB_LOG_DEPRECATIONS:-''}
+    if [[ -n $log_deprecations && -z $BATS_VERSION ]]; then
+        echo "$EPOCHSECONDS $function_name ${replacement:-'-'} ${BASH_SOURCE[2]}:${BASH_LINENO[1]}"\
+            >> "$HOME/.jdvlib-deprecations.log"
+    fi
     message+="The function $(ansi::ansi --italic "$function_name") is deprecated."
     if [[ -n $replacement ]]; then
         message+=" Use $(ansi::ansi --italic "$replacement") instead."
