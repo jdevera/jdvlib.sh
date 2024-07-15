@@ -12,13 +12,13 @@ _common_setup() {
     # use $BATS_TEST_FILENAME instead of ${BASH_SOURCE[0]} or $0,
     # as those will point to the bats executable's location or the preprocessed file respectively
     # bashsupport disable=BP2001
-    export JDVLIB_PATH PROJECT_ROOT
+    export __JDVLIB_PATH PROJECT_ROOT
     PROJECT_ROOT="$( cd "$( dirname "$BATS_TEST_FILENAME" )/.." >/dev/null 2>&1 && pwd )"
-    JDVLIB_PATH="$PROJECT_ROOT/lib"
+    __JDVLIB_PATH="$PROJECT_ROOT/lib"
     # make executables in src/ visible to PATH
-    PATH="$JDVLIB_PATH:$PATH"
+    PATH="$__JDVLIB_PATH:$PATH"
     # shellcheck source=./../../lib/_meta.sh
-    source "$JDVLIB_PATH/_meta.sh"
+    source "$__JDVLIB_PATH/_meta.sh"
 }
 
 strip_ansi() {
