@@ -81,7 +81,7 @@ ui::deprecate() {
     if [[ -n $replacement ]]; then
         message+=" Use $(ansi::ansi --italic "$replacement") instead."
     fi
-    ui::deco_message "$sign" --magenta-intense "$message"
+    ui::deco_message "$sign" --magenta-intense "$message" >&2
 }
 
 ui::echo_step() {
