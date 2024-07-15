@@ -24,3 +24,7 @@ code::script_dir() {
     script_dir=$(cd "$(dirname "${BASH_SOURCE[1]}")" &>/dev/null && pwd)
     echo "$script_dir"
 }
+
+code::is_sourced() {
+    [[ "${BASH_SOURCE[1]}" != "${0}" ]]
+}

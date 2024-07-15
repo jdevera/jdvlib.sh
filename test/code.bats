@@ -18,3 +18,13 @@ teardown() {
     assert_success
     assert_output "$BATS_TEST_DIRNAME/scripts"
 }
+
+@test "test_is_sourced" {
+    run sourced_checker.sh
+    assert_success
+    assert_output "ran"
+
+    run source sourced_checker.sh
+    assert_success
+    assert_output "sourced"
+}

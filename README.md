@@ -170,6 +170,7 @@ Functions that relate to the code itself, where it is located, and how it is use
 
 #### Functions
 
+- `code::is_sourced`
 - `code::script_dir`
 
 ### Module `compat`
