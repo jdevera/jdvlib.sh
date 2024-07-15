@@ -112,7 +112,7 @@ teardown() {
 
     run user::create $user
     assert_success
-    register_teardown "userdel $user"
+    register_teardown "userdel -f $user"
 
     run user::exists $user
     assert_success

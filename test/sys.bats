@@ -337,7 +337,7 @@ fake_uname() {
     user=test_user
 
     user::create "$user"
-    register_teardown "userdel $user"
+    register_teardown "userdel -f $user"
 
     run sys::run_as root whoami
     assert_success

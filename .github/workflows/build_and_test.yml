@@ -1,0 +1,27 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+env:
+  TERM: linux
+
+jobs:
+  linux-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+        fetch-depth: 0
+    - name: Checks
+      run: make check
+    - name: Run tests (as root)
+      run: |
+        sudo make test
+    - name: Compile to a file
+      run: make build
+    - name: Run checks on the single file
+      run: make checkdist
