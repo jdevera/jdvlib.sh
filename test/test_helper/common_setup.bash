@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
+__TEARDOWN_FUNCTIONS=()
 
 _common_setup() {
+    # shellcheck source=./bats-support/load.bash
     load 'test_helper/bats-support/load'
+    # shellcheck source=./bats-assert/load.bash
     load 'test_helper/bats-assert/load'
+
     # get the containing directory of this file
     # use $BATS_TEST_FILENAME instead of ${BASH_SOURCE[0]} or $0,
     # as those will point to the bats executable's location or the preprocessed file respectively
@@ -53,6 +57,7 @@ skip_unless_docker_container() {
 
 register_teardown() {
     local function=$1
+    declare -ga __TEARDOWN_FUNCTIONS
     __TEARDOWN_FUNCTIONS+=("$function")
 }
 
@@ -60,6 +65,7 @@ register_teardown() {
 _run_teardown_functions() {
     # Run and remove all teardown functions
     # first make a local copy of the array to ensure cleanup even if a function fails
+    declare -ga __TEARDOWN_FUNCTIONS
     local functions=("${__TEARDOWN_FUNCTIONS[@]}")
     __TEARDOWN_FUNCTIONS=()
     local function
@@ -88,6 +94,17 @@ refute_set() {
         'variable' "\$$1" \
         'content' "$var" \
         | batslib_decorate 'Variable is set' \
+        | fail
+    fi
+}
+
+assert_output_contains() {
+    local expected=$1
+    if [[ $output != *"$expected"* ]]; then
+        batslib_print_kv_single_or_multi 8 \
+        'expected' "$expected" \
+        'output' "$output" \
+        | batslib_decorate 'Output does not contain expected string' \
         | fail
     fi
 }

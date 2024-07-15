@@ -1,11 +1,14 @@
 FROM debian:12-slim
 LABEL authors="Jacobo de Vera"
 
-COPY . /app
-WORKDIR /app
-
 RUN apt-get update && apt-get install -y \
-    make
+    make \
+    git \
+    ;
 
+WORKDIR /app
 ENV TERM=xterm-256color
+
+COPY . /app
+
 ENTRYPOINT ["./test.sh"]

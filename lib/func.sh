@@ -48,6 +48,10 @@ func::list_functions_in_file() {
     fi
     local file_path
     file_path=$( cd "$( dirname "$file" )" &> /dev/null && pwd )/$(basename "$file")
+    if [[ ! -f $file_path ]]; then
+        ui::fail "meta::list_functions_in_file: The file '$file' does not exist."
+        return 1
+    fi
     (
         # shellcheck source=/dev/null
         . "$file_path"
