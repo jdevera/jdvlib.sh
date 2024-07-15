@@ -69,7 +69,7 @@ teardown() {
     meta::import user
 
     user::create "$user_name"
-    register_teardown "userdel $user_name"
+    register_teardown "userdel -f $user_name"
     run user::exists "$user_name"
     assert_success
 

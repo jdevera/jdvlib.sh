@@ -5,7 +5,7 @@ setup_file() {
     PROJECT_ROOT="$( cd "$( dirname "$BATS_TEST_FILENAME" )/.." >/dev/null 2>&1 && pwd )"
     export JDVLIB_COMPILED_PATH=$BATS_FILE_TMPDIR/jdvlib.sh
     pushd "$PROJECT_ROOT" > /dev/null || return 1
-    "$PROJECT_ROOT/compile.sh" lib "${JDVLIB_COMPILED_PATH}"
+    "$BASH" ./compile.sh lib "${JDVLIB_COMPILED_PATH}"
     popd > /dev/null || return 1
 }
 
