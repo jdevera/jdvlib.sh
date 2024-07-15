@@ -127,11 +127,13 @@ sys::ensure_linux() {
 sys::run_as() {
     local user=$1
     shift
+    local -a command=()
     if user::is_root; then
-        su - "$user" -c "$*"
+        command=(su - "$user" -c "$*")
     else
-        sudo -u "$user" "$@"
+        command=(sudo -u "$user" "$@")
     fi
+    "${command[@]}"
 }
 
 sys::is_docker_host() {

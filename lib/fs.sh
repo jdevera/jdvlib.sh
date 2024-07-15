@@ -77,7 +77,8 @@ fs::can_user_write_to_dir() {
     local user=$1
     local dir=$2
     local tmp_file
-    if tmp_file=$(sys::run_as "$user" mktemp "$dir/.test_write.XXXXXX"); then
+    tmp_file="$(mktemp -u "$dir/test_write.XXXXXX")"
+    if sys::run_as "$user" touch "$tmp_file"; then
         sys::run_as "$user" rm "$tmp_file"
         return 0
     else
