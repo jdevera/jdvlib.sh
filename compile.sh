@@ -195,7 +195,7 @@ get_module_doc() {
         # shellcheck disable=SC2016 # We want the backticks to be literal
         local functions count
         functions=$(func::list_functions_in_file "$file" | sed 's/\(.*\)/- `\1`/')
-        count=$(echo "$functions" | wc -l)
+        count=$(echo "$functions" | wc -l | awk '{print $1}')
         if [[ $count -gt 25 ]]; then
             echo '<details>'
             echo "<summary>Click to expand ($count functions)</summary>"

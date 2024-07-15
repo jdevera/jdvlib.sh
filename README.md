@@ -29,7 +29,7 @@ Functions related to ANSI escape codes. This code is vendored in from
 #### Functions
 
 <details>
-<summary>Click to expand (     118 functions)</summary>
+<summary>Click to expand (118 functions)</summary>
 
 - `ansi::ansi`
 - `ansi::backward`
@@ -181,7 +181,7 @@ future.
 #### Functions
 
 <details>
-<summary>Click to expand (      38 functions)</summary>
+<summary>Click to expand (38 functions)</summary>
 
 - `ask`
 - `can_user_write_to_dir`
