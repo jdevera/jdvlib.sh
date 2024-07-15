@@ -24,6 +24,41 @@ teardown() {
     assert_failure
 }
 
+@test "test_ensure_file_exists" {
+    file="$BATS_TEST_TMPDIR/test_ensure_file_exists"
+    touch "$file"
+    run fs::ensure_file_exists "$file"
+    assert_success
+
+
+    reassure=true run_stripped fs::ensure_file_exists "$file"
+    assert_success
+    assert_output "✔ File $file exists"
+
+    run rm "$file"
+    assert_success
+
+    run fs::ensure_file_exists "$file"
+    assert_failure
+}
+
+@test "test_ensure_dir_exists" {
+    dir="$BATS_TEST_TMPDIR/test_ensure_dir_exists"
+    mkdir "$dir"
+    run fs::ensure_dir_exists "$dir"
+    assert_success
+
+    reassure=true run_stripped fs::ensure_dir_exists "$dir"
+    assert_success
+    assert_output "✔ Directory $dir exists"
+
+    run rm -r "$dir"
+    assert_success
+
+    run fs::ensure_dir_exists "$dir"
+    assert_failure
+}
+
 @test "test_can_user_write_to_dir" {
     skip_unless_docker_container
 
