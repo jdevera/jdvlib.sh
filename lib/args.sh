@@ -56,7 +56,9 @@ args::ensure_num_args() {
 #   Ensure the number of arguments is between a minimum and maximum.
 #   If the number of arguments is incorrect, the usage function is called and
 #   the script exits.
-#   The max can be set to -1 to indicate no maximum.
+# @arg $1 number The minimum number of arguments
+# @arg $2 number The maximum number of arguments (-1 for no upper limit)
+# @arg $3 function The usage function to call if the number of arguments is incorrect
 args::ensure_num_args_between() {
     local min=$1
     local max=$2
