@@ -104,7 +104,7 @@ ensure_has_commands() {
 
 script_dir() {
     ui::deprecate "script_dir" "code::script_dir"
-    code::script_dir
+    code::script_dir "$@"
 }
 
 ensure_in_path() {

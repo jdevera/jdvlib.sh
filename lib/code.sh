@@ -18,10 +18,13 @@ jdvlib:doc
 
 # jdvlib: --- END IMPORTS ---
 
-
+# Use extra_level if you are calling this from included files
+# rather than a script directly.
 code::script_dir() {
+    local -i extra_level=${1:-0}
     local script_dir
-    script_dir=$(cd "$(dirname "${BASH_SOURCE[1]}")" &>/dev/null && pwd)
+    local source=${BASH_SOURCE[1 + extra_level]}
+    script_dir=$(cd "$(dirname "${source}")" &>/dev/null && pwd)
     echo "$script_dir"
 }
 
