@@ -19,6 +19,8 @@ TESTS := $(wildcard test/**/*)
 build/jdvlib.sh: $(LIB_FILES) $(TEMPLATES) compile.sh
 	@mkdir -p build
 	@./compile.sh lib build/jdvlib.sh
+	VERSION=$$(bash build/jdvlib.sh --version); \
+	  command cp build/jdvlib.sh build/jdvlib-$${VERSION}.sh
 
 # Clean target
 clean:
