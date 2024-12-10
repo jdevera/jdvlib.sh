@@ -55,3 +55,13 @@ readme:
 
 testci:
 	echo no
+
+# Installation directories
+DESTDIR ?= /
+PREFIX ?= /usr/local
+
+# Install target
+install: build/jdvlib.sh
+	@echo "Installing jdvlib.sh to $(DESTDIR)$(PREFIX)..."
+	install -d $(DESTDIR)$(PREFIX)/bin
+	install -CS -m 755 build/jdvlib.sh $(DESTDIR)$(PREFIX)/bin/jdvlib.sh
