@@ -128,6 +128,32 @@ sys::ensure_linux() {
         "This is a Linux system"
 }
 
+sys::macos_version() {
+    sys::ensure_macos
+    sw_vers -productVersion
+}
+
+sys::macos_code_name() {
+    local version
+    version=$(sys::macos_version)
+    case $version in
+        10.10*) echo "Yosemite" ;;
+        10.11*) echo "El Capitan" ;;
+        10.12*) echo "Sierra" ;;
+        10.13*) echo "High Sierra" ;;
+        10.14*) echo "Mojave" ;;
+        10.15*) echo "Catalina" ;;
+        11*) echo "Big Sur" ;;
+        12*) echo "Monterey" ;;
+        13*) echo "Ventura" ;;
+        14*) echo "Sonoma" ;;
+        *)
+            echo "Unknown macOS version: $version"
+            return 1
+            ;;
+    esac
+}
+
 sys::run_as() {
     local user=$1
     shift
