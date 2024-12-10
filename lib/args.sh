@@ -29,6 +29,9 @@ args::check_help_arg() {
     local help_function=$1
     shift
     while [[ $# -gt 0 ]]; do
+        if [[ $1 == '--' ]]; then
+            break
+        fi
         if [[ "$1" == "-h" || "$1" == "--help" ]]; then
             "$help_function"
             exit 0
