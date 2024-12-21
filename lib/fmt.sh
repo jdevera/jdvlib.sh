@@ -34,7 +34,7 @@ declare -ga __BYTES_UNITS=(
 )
 
 fmt::__deps() {
-    sys::ensure_has_commands bc
+    sys::ensure_has_commands awk
 }
 
 fmt::__get_unit_factor() {
@@ -78,7 +78,7 @@ fmt::bytes() {
     local max_unit=${2:-EB}
 
     local -i magnitude
-    magnitude=$(echo "scale=0; l($bytes) / l(1024)" | bc -l)
+    magnitude=$(awk "BEGIN {print int(log($bytes) / log(1024))}")
 
     local unit=''
     if [[ -n "$max_unit" ]]; then
@@ -102,11 +102,7 @@ fmt::bytes_to() {
     local value
 
     conversion_factor=$(fmt::__get_unit_factor "$unit")
-    value=$(echo "scale=2; $bytes / $conversion_factor" | bc -zl)
-    # Add .00 if the value has no dot
-    if [[ $value != *"."* ]]; then
-        value+='.00'
-    fi
+    value=$(awk "BEGIN {printf \"%.2f\", $bytes / $conversion_factor}")
 
     echo "$value $unit"
 }
