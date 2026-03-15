@@ -18,6 +18,12 @@ meta::import ui
 
 # jdvlib: --- END IMPORTS ---
 
+# @description Check if a function exists
+# @arg $1 string The function name to check
+func::exists() {
+    declare -f -F "$1" >/dev/null
+}
+
 # A function that can be used to ensure boolean functions return true.
 #
 # This is mostly intended to be used to create ensure_ functions in the library.

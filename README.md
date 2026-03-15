@@ -275,6 +275,7 @@ Functions related to functions and function management.
 #### Functions
 
 - `func::ensure`
+- `func::exists`
 - `func::list_functions_in_file`
 
 ### Module `pve`
