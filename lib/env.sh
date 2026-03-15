@@ -83,4 +83,3 @@ env::ensure_is_set() {
     fi
     ui::reassure "Variable is set: $1"
 }
-
