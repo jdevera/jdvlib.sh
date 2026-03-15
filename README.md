@@ -308,6 +308,8 @@ Functions related to the system, its attributes and capabilities.
 - `sys::is_in_path`
 - `sys::is_linux`
 - `sys::is_macos`
+- `sys::macos_code_name`
+- `sys::macos_version`
 - `sys::run_as`
 
 ### Module `text`
