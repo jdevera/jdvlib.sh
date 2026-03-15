@@ -20,12 +20,26 @@ jdvlib:doc
 
 # Use extra_level if you are calling this from included files
 # rather than a script directly.
+# Collapses repeated adjacent BASH_SOURCE entries to handle cases
+# where scripts are sourced multiple times.
 code::script_dir() {
     local -i extra_level=${1:-0}
-    local script_dir
-    local source=${BASH_SOURCE[1 + extra_level]}
-    script_dir=$(cd "$(dirname "${source}")" &>/dev/null && pwd)
-    echo "$script_dir"
+    local -a collapsed_sources
+    local last_source=
+    local src
+    for src in "${BASH_SOURCE[@]}"; do
+        if [[ $src != "$last_source" ]]; then
+            collapsed_sources+=("$src")
+            last_source=$src
+        fi
+    done
+    src=${collapsed_sources[1 + $extra_level]}
+    if [[ -z $src ]]; then
+        src=${collapsed_sources[-1]}
+    fi
+    local dir
+    dir="$(cd "$(dirname "$src")" &>/dev/null && pwd)"
+    echo "$dir"
 }
 
 code::is_sourced() {
