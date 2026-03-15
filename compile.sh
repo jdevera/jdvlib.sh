@@ -132,13 +132,20 @@ handle_args() {
     esac
 }
 
-# Override source to output the file contents
-source_override_attach_code() {
-    if_dest_is_file ui::echo_step "Attaching file: $1"
+# Get the ordered list of module filenames from lib.sh
+get_module_files() {
+    awk '/^source / { print $2 }' ./lib/lib.sh
+}
+
+attach_module_code() {
+    local file=$1
+    local name
+    name=$(basename "$file")
+    if_dest_is_file ui::echo_step "Attaching file: $name"
     {
-        echo -e "\n## --- Begin File: $1 --- [[["
-        cat "$@" | comment_out_imports
-        echo -e "\n## --- End File: $1 --- ]]]"
+        echo -e "\n## --- Begin File: $name --- [[["
+        cat "$file" | comment_out_imports
+        echo -e "\n## --- End File: $name --- ]]]"
     } | out
 }
 
@@ -163,16 +170,15 @@ target_lib() {
     DEST=${DEST:-'-'}
     fs::ensure_file_exists "$header_file"
     fs::ensure_file_exists "$footer_file"
-    source() {
-        source_override_attach_code "$@"
-    }
     init_dest_file --truncate
     out "$header_file"
     library_metadata | out
 
+    local file
+    while IFS= read -r file; do
+        attach_module_code "$__JDVLIB_DIR/$file"
+    done < <(get_module_files)
 
-    # Since "source" is overridden, calling it with builtin to make sure this is the real one
-    command source ./lib/lib.sh
     out "$footer_file"
 }
 
@@ -213,32 +219,30 @@ get_module_doc() {
     fi
 }
 
-source_override_document_modules() {
-    if_dest_is_file ui::echo_step "Documenting file: $1"
-    get_module_doc "$1" | out
+document_module() {
+    local file=$1
+    if_dest_is_file ui::echo_step "Documenting file: $(basename "$file")"
+    get_module_doc "$file" | out
 }
 
 target_doc() {
     DEST=${DEST:-'-'}
-    source() {
-        source_override_document_modules "$@"
-    }
     init_dest_file --truncate
 
-    # Since "source" is overridden, calling it with builtin to make sure this is the real one
-    command source ./lib/lib.sh
+    local file
+    while IFS= read -r file; do
+        document_module "$__JDVLIB_DIR/$file"
+    done < <(get_module_files)
 }
 
-source_override_readme() {
-    if_dest_is_file ui::echo_step "Documenting file: $1" >&2
-    get_module_doc --functions "$1"
+document_module_for_readme() {
+    local file=$1
+    if_dest_is_file ui::echo_step "Documenting file: $(basename "$file")" >&2
+    get_module_doc --functions "$file"
 }
 
 target_readme() {
     local README_FILE="$__JDVLIB_PROJECT_DIR/README.md"
-    source() {
-        source_override_readme "$@"
-    }
 
     # No argument means we are writing to the README file
     if [[ $DEST != "-" ]]; then
@@ -250,8 +254,12 @@ target_readme() {
     init_dest_file --append
 
     local docs
-    # Since "source" is overridden, calling it with builtin to make sure this is the real one
-    docs="$(command source ./lib/lib.sh)"
+    docs=$(
+        local file
+        while IFS= read -r file; do
+            document_module_for_readme "$__JDVLIB_DIR/$file"
+        done < <(get_module_files)
+    )
 
     filter_function() {
         text::replace_inside_markers \
