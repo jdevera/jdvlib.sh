@@ -45,6 +45,43 @@ func::ensure() {
     ui::reassure "$reasurance_message"
 }
 
+# @description Find the first candidate that passes a checker and call it
+# @arg $1 string The checker function to test each candidate
+# @arg $@ string Candidate names, optionally followed by -- and arguments
+func::call_first_matching() {
+    local checker=$1
+    shift
+    local callable=
+    while [[ $# -gt 0 ]]; do
+        [[ $1 == '--' ]] && return 1
+        if "$checker" "$1"; then
+            callable="$1"
+            shift
+            break
+        fi
+        shift
+    done
+
+    [[ -z $callable ]] && return 1
+
+    # Discard remaining candidates until -- or end
+    while [[ $# -gt 0 ]]; do
+        if [[ $1 == '--' ]]; then
+            shift
+            break
+        fi
+        shift
+    done
+
+    "$callable" "$@"
+}
+
+# @description Call the first existing function from a list
+# @arg $@ string Function names, optionally followed by -- and arguments
+func::call_first_of() {
+    func::call_first_matching func::exists "$@"
+}
+
 func::list_functions_in_file() {
     local file=$1
     local extdebug_was_off=0

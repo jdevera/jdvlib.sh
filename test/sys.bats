@@ -23,6 +23,14 @@ teardown() {
     assert_failure
 }
 
+@test "test_run_first_of" {
+    run sys::run_first_of not_a_real_cmd_xyz bash -- --version
+    assert_success
+
+    run sys::run_first_of not_a_cmd_1 not_a_cmd_2
+    assert_failure
+}
+
 @test "test_ensure_has_commands" {
     run sys::ensure_has_commands bash ls
     assert_success

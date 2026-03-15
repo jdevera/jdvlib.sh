@@ -274,6 +274,8 @@ Functions related to functions and function management.
 
 #### Functions
 
+- `func::call_first_matching`
+- `func::call_first_of`
 - `func::ensure`
 - `func::exists`
 - `func::list_functions_in_file`
@@ -314,6 +316,7 @@ Functions related to the system, its attributes and capabilities.
 - `sys::macos_code_name`
 - `sys::macos_version`
 - `sys::run_as`
+- `sys::run_first_of`
 
 ### Module `text`
 

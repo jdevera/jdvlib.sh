@@ -32,6 +32,12 @@ sys::has_command() {
 }
 
 
+# @description Run the first existing command from a list
+# @arg $@ string Command names, optionally followed by -- and arguments
+sys::run_first_of() {
+    func::call_first_matching sys::has_command "$@"
+}
+
 # @description Ensure that the required commands are available
 # If any of the commands are not available, the script will exit with an error
 # that lists the missing commands.
