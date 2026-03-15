@@ -57,8 +57,13 @@ testci:
 	echo no
 
 # Installation directories
+ifeq ($(shell id -u),0)
 DESTDIR ?= /
 PREFIX ?= /usr/local
+else
+DESTDIR ?= $(HOME)/.local
+PREFIX ?=
+endif
 
 # Install target
 install: build/jdvlib.sh
