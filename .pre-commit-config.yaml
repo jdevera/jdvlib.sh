@@ -1,0 +1,26 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+  - repo: local
+    hooks:
+      - id: readme-up-to-date
+        name: readme up to date
+        language: script
+        entry: ./compile.sh readme
+        files: ^(lib/.*\.sh|compile\.sh)$
+        pass_filenames: false
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        name: shellcheck (library)
+        args: ["--check-sourced"]
+        files: ^lib/lib\.sh$
+      - id: shellcheck
+        name: shellcheck (non-library)
+        files: \.(sh|bash|bats)$
+        exclude: ^lib/

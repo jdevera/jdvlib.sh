@@ -234,8 +234,8 @@ EOF
         #--SETUP-END--
         After content
 EOF
+    # shellcheck disable=SC2317,SC2329 # Invoked indirectly
     filter() {
-        # shellcheck disable=SC2317 # This will be used indirectly
         sed 's/This should be/That is/'
     }
     run text::filter_inside_markers \
@@ -266,8 +266,8 @@ EOF
         After content
 EOF
     )
+    # shellcheck disable=SC2317,SC2329 # Invoked indirectly
     filter() {
-        # shellcheck disable=SC2317 # This will be used indirectly
         sed 's/This should be/That is/'
     }
     run text::filter_inside_markers \
@@ -296,8 +296,8 @@ EOF
         This should be changed
         no end
 EOF
+    # shellcheck disable=SC2317,SC2329 # Invoked indirectly
     filter() {
-        # shellcheck disable=SC2317 # This will be used indirectly
         sed 's/\(.*\)/--\1--/'
     }
     run text::filter_inside_markers \
@@ -325,8 +325,8 @@ EOF
         #--SETUP-END--
         After content
 EOF
+    # shellcheck disable=SC2317,SC2329 # Invoked indirectly
     filter() {
-        # shellcheck disable=SC2317 # This will be used indirectly
         sed 's/This should be/That is/'
     }
     run text::filter_inside_markers \
@@ -376,4 +376,3 @@ EOF
 EOF
     )"
 }
-

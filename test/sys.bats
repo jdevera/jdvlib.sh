@@ -136,7 +136,7 @@ fake_uname() {
 
 @test "test get arch" {
 
-    # shellcheck disable=SC2317 # This is mocking the command
+    # shellcheck disable=SC2317,SC2329 # This is mocking the command
     uname() {
         fake_uname "$@"
     }
@@ -149,7 +149,7 @@ fake_uname() {
     # shellcheck disable=SC2031,SC2030 # It's okay to be changed within the test subshell
     export __test_uname_s_answer=Linux
 
-    # shellcheck disable=SC2317 # This is mocking the command
+    # shellcheck disable=SC2317,SC2329 # This is mocking the command
     dpkg() {
         log_mock_call dpkg "amd64" "$@"
         echo amd64
@@ -188,7 +188,7 @@ fake_uname() {
     # shellcheck disable=SC2031,SC2030 # It's okay to be changed within the test subshell
     export __test_uname_s_answer=''
 
-    # shellcheck disable=SC2317 # This is mocking the command
+    # shellcheck disable=SC2317,SC2329 # This is mocking the command
     uname() {
         __test_uname_m_answer='' \
         __test_uname_s_answer="$__test_uname_s_answer" \
@@ -218,7 +218,7 @@ fake_uname() {
     # shellcheck disable=SC2031,SC2030 # It's okay to be changed within the test subshell
     export __test_uname_m_answer=''
 
-    # shellcheck disable=SC2317 # This is mocking the command
+    # shellcheck disable=SC2317,SC2329 # This is mocking the command
     uname() {
         fake_uname "$@"
     }
@@ -240,7 +240,7 @@ fake_uname() {
     # shellcheck disable=SC2031,SC2030 # It's okay to be changed within the test subshell
     export __test_uname_m_answer=''
 
-    # shellcheck disable=SC2317 # This is mocking the command
+    # shellcheck disable=SC2317,SC2329 # This is mocking the command
     uname() {
         fake_uname "$@"
     }
