@@ -302,6 +302,7 @@ fake_uname() {
         --failure \
             "This is intended to run on a Docker host"
 
+    # shellcheck disable=SC2317,SC2329 # This is mocking the command
     docker() { ui::die "Should not call docker"; }
     register_teardown "unset -f docker"
     export -f docker
@@ -322,6 +323,40 @@ fake_uname() {
     test_ensure_function sys::ensure_docker_host \
         --success \
             "This is a Docker host"
+}
+
+@test "test_is_docker_running" {
+    # shellcheck disable=SC2317,SC2329 # This is mocking the command
+    docker() {
+        log_mock_call docker "" "$@"
+        return 0
+    }
+    export -f docker
+    register_teardown "unset -f docker"
+
+    run sys::is_docker_running
+    assert_success
+
+    test_ensure_function sys::ensure_docker_running \
+        --success \
+            "Docker daemon is running"
+}
+
+@test "test_is_docker_not_running" {
+    # shellcheck disable=SC2317,SC2329 # This is mocking the command
+    docker() {
+        log_mock_call docker "" "$@"
+        return 1
+    }
+    export -f docker
+    register_teardown "unset -f docker"
+
+    run sys::is_docker_running
+    assert_failure
+
+    test_ensure_function sys::ensure_docker_running \
+        --failure \
+            "Docker daemon is not running"
 }
 
 @test "test_run_as_same_user" {

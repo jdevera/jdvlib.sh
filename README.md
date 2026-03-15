@@ -297,6 +297,7 @@ Functions related to the system, its attributes and capabilities.
 
 - `sys::ensure_debian`
 - `sys::ensure_docker_host`
+- `sys::ensure_docker_running`
 - `sys::ensure_has_commands`
 - `sys::ensure_in_path`
 - `sys::ensure_linux`
@@ -306,6 +307,7 @@ Functions related to the system, its attributes and capabilities.
 - `sys::has_command`
 - `sys::is_debian`
 - `sys::is_docker_host`
+- `sys::is_docker_running`
 - `sys::is_in_path`
 - `sys::is_linux`
 - `sys::is_macos`

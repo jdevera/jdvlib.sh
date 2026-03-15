@@ -177,3 +177,15 @@ sys::ensure_docker_host() {
         "This is intended to run on a Docker host" \
         "This is a Docker host"
 }
+
+# @description Check if the Docker daemon is running and accessible
+sys::is_docker_running() {
+    docker info &>/dev/null
+}
+
+# @description Ensure the Docker daemon is running, die with an error if not
+sys::ensure_docker_running() {
+    func::ensure sys::is_docker_running \
+        "Docker daemon is not running" \
+        "Docker daemon is running"
+}
