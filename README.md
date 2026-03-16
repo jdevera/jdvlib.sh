@@ -35,7 +35,6 @@ This module is the basis for imports, so there should never be an import of this
 
 - `meta::for_each_library_module`
 - `meta::import`
-- `meta::is_compiling`
 - `meta::lib_is_compiled`
 - `meta::library_path`
 - `meta::module_is_running`

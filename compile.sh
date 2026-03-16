@@ -282,10 +282,6 @@ fs::ensure_file_exists ./lib/lib.sh
 
 if_dest_is_file ui::info "Building target: $TARGET"
 
-# This will let the files know that they are being sourced for compilation
-# Some places may need to know this to avoid running code that is not needed
-# bashsupport disable=BP2001 # No, variable could definitely not be declared local
-export __jdvlib_compiling=true
 
 "$target_compiler"
 

@@ -12,8 +12,7 @@ jdvlib:doc
 # files are included in the compiled file.
 #
 # shellcheck source=./_meta.sh
-[[ ${__jdvlib_compiling:-'0'} == '0' ]] && \
-    source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/_meta.sh"
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/_meta.sh"
 
 # jdvlib: --- END IMPORTS ---
 #

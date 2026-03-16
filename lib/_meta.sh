@@ -13,7 +13,7 @@ __JDVLIB_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 meta::import() {
     local file="$1"
 
-    if meta::lib_is_compiled || meta::is_compiling; then
+    if meta::lib_is_compiled; then
         return
     fi
 
@@ -25,10 +25,6 @@ meta::lib_is_compiled() {
     [[ -n ${__JDVLIB_BUILD_DATE} ]]
 }
 
-meta::is_compiling() {
-    [[ ${__jdvlib_compiling:-'0'} != '0' ]]
-}
-
 meta::module_is_running() {
     if meta::lib_is_compiled; then
         return 1
@@ -38,14 +34,10 @@ meta::module_is_running() {
 
 meta::for_each_library_module() {
     local action=$1
-
-    source() {
-        local file=$1
-        "$action" "$file"
-    }
-
-    # Since "source" is overridden, calling it with builtin to make sure this is the real one
-    __jdvlib_compiling=1 command source "$__JDVLIB_PATH/lib.sh"
+    local file
+    while IFS= read -r file; do
+        "$action" "$__JDVLIB_PATH/$file"
+    done < <(awk '/^source / { print $2 }' "$__JDVLIB_PATH/lib.sh")
 }
 
 meta::library_path() {
