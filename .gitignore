@@ -2,3 +2,5 @@
 build/
 lib/dump.sh
 dumpster/
+.claude/
+.private/
