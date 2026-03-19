@@ -23,10 +23,23 @@ __ANSI_OSC="${__ANSI_ESC}]"
 __ANSI_ST="${__ANSI_ESC}\\"
 
 # @description Check if the terminal supports ANSI escape codes.
+#
+#     Respects the FORCE_COLOR and NO_COLOR environment variables:
+#
+#     - `FORCE_COLOR` (non-empty): always enable ANSI, overrides everything.
+#       See https://force-color.org/
+#     - `NO_COLOR` (non-empty): disable ANSI.
+#       See https://no-color.org/
+#     - `FORCE_COLOR` takes precedence over `NO_COLOR`.
+#
 # @noargs
+# @env FORCE_COLOR string Force ANSI support when non-empty.
+# @env NO_COLOR string Disable ANSI support when non-empty.
 # @exitcode 0 If ANSI is supported.
 # @exitcode 1 If ANSI is not supported.
 ansi::isSupported() {
+    [[ -n "${FORCE_COLOR:-}" ]] && return 0
+    [[ -n "${NO_COLOR:-}" ]] && return 1
     [[ -t 1 ]] || return 1
     [[ "${TERM:-}" != "dumb" ]] || return 1
     return 0
