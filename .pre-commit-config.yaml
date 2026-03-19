@@ -20,6 +20,10 @@ repos:
         entry: ./compile.sh readme
         files: ^(lib/.*\.sh|compile\.sh)$
         pass_filenames: false
+  - repo: https://github.com/jdevera/shdoc-ng
+    rev: v0.5.0
+    hooks:
+      - id: shdoc-ng-check
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
