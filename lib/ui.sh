@@ -31,7 +31,7 @@ ui::deco_message() {
     local color=$2
     local message=$3
     # shellcheck disable=SC2086 # Expansion of the color var is intended
-    echo -e "$(ansi::ansi $color --bold "$sign") $(ansi::ansi --bold "$message")"
+    echo -e "$(ansi::style -n $color --bold "$sign") $(ansi::style -n --bold "$message")"
 }
 
 # Print a message to stderr and exit with a non-zero status
@@ -76,9 +76,9 @@ ui::deprecate() {
         echo "$EPOCHSECONDS $function_name ${replacement:-'-'} ${BASH_SOURCE[2]}:${BASH_LINENO[1]}"\
             >> "$HOME/.jdvlib-deprecations.log"
     fi
-    message+="The function $(ansi::ansi --italic "$function_name") is deprecated."
+    message+="The function $(ansi::style -n --italic "$function_name") is deprecated."
     if [[ -n $replacement ]]; then
-        message+=" Use $(ansi::ansi --italic "$replacement") instead."
+        message+=" Use $(ansi::style -n --italic "$replacement") instead."
     fi
     ui::deco_message "$sign" --magenta-intense "$message" >&2
 }

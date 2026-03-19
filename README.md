@@ -41,134 +41,17 @@ This module is the basis for imports, so there should never be an import of this
 
 ### Module `ansi`
 
-Functions related to ANSI escape codes. This code is vendored in from
-[Tyler Akins' ansi project](https://github.com/fidian/ansi).
+ANSI escape code utilities for text styling, cursor control, display
+manipulation, and terminal operations. Organized into four functions:
+ansi::style, ansi::cursor, ansi::display, and ansi::term.
 
 #### Functions
 
-<details>
-<summary>Click to expand (118 functions)</summary>
-
-- `ansi::ansi`
-- `ansi::backward`
-- `ansi::bell`
-- `ansi::bgBlack`
-- `ansi::bgBlackIntense`
-- `ansi::bgBlue`
-- `ansi::bgBlueIntense`
-- `ansi::bgColor`
-- `ansi::bgCyan`
-- `ansi::bgCyanIntense`
-- `ansi::bgGreen`
-- `ansi::bgGreenIntense`
-- `ansi::bgMagenta`
-- `ansi::bgMagentaIntense`
-- `ansi::bgRed`
-- `ansi::bgRedIntense`
-- `ansi::bgRgb`
-- `ansi::bgWhite`
-- `ansi::bgWhiteIntense`
-- `ansi::bgYellow`
-- `ansi::bgYellowIntense`
-- `ansi::black`
-- `ansi::blackIntense`
-- `ansi::blink`
-- `ansi::blue`
-- `ansi::blueIntense`
-- `ansi::bold`
-- `ansi::color`
-- `ansi::colorCodePatch`
-- `ansi::colorCodes`
-- `ansi::colorTable`
-- `ansi::colorTableLine`
-- `ansi::column`
-- `ansi::columnRelative`
-- `ansi::cyan`
-- `ansi::cyanIntense`
-- `ansi::deleteChars`
-- `ansi::deleteLines`
-- `ansi::doubleUnderline`
-- `ansi::down`
-- `ansi::encircle`
-- `ansi::eraseChars`
-- `ansi::eraseDisplay`
-- `ansi::eraseLine`
-- `ansi::faint`
-- `ansi::font`
-- `ansi::forward`
-- `ansi::fraktur`
-- `ansi::frame`
-- `ansi::green`
-- `ansi::greenIntense`
-- `ansi::hideCursor`
-- `ansi::icon`
-- `ansi::ideogramLeft`
-- `ansi::ideogramLeftDouble`
-- `ansi::ideogramRight`
-- `ansi::ideogramRightDouble`
-- `ansi::ideogramStress`
-- `ansi::insertChars`
-- `ansi::insertLines`
-- `ansi::inverse`
-- `ansi::invisible`
-- `ansi::isAnsiSupported`
-- `ansi::italic`
-- `ansi::line`
-- `ansi::lineRelative`
-- `ansi::magenta`
-- `ansi::magentaIntense`
-- `ansi::nextLine`
-- `ansi::noBlink`
-- `ansi::noBorder`
-- `ansi::noInverse`
-- `ansi::noOverline`
-- `ansi::noStrike`
-- `ansi::noUnderline`
-- `ansi::normal`
-- `ansi::overline`
-- `ansi::plain`
-- `ansi::position`
-- `ansi::previousLine`
-- `ansi::rapidBlink`
-- `ansi::red`
-- `ansi::redIntense`
-- `ansi::repeat`
-- `ansi::report`
-- `ansi::reportIcon`
-- `ansi::reportPosition`
-- `ansi::reportScreenChars`
-- `ansi::reportTitle`
-- `ansi::reportWindowChars`
-- `ansi::reportWindowPixels`
-- `ansi::reportWindowPosition`
-- `ansi::reportWindowState`
-- `ansi::reset`
-- `ansi::resetAttributes`
-- `ansi::resetBackground`
-- `ansi::resetColor`
-- `ansi::resetFont`
-- `ansi::resetForeground`
-- `ansi::resetIdeogram`
-- `ansi::restoreCursor`
-- `ansi::rgb`
-- `ansi::saveCursor`
-- `ansi::scrollDown`
-- `ansi::scrollUp`
-- `ansi::showCursor`
-- `ansi::showHelp`
-- `ansi::strike`
-- `ansi::tabBackward`
-- `ansi::tabForward`
-- `ansi::title`
-- `ansi::underline`
-- `ansi::up`
-- `ansi::visible`
-- `ansi::white`
-- `ansi::whiteIntense`
-- `ansi::yellow`
-- `ansi::yellowIntense`
-
-</details>
+- `ansi::cursor`
+- `ansi::display`
+- `ansi::isSupported`
+- `ansi::style`
+- `ansi::term`
 
 ### Module `args`
 
