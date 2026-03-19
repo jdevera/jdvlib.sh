@@ -17,6 +17,8 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/_meta.sh"
 
 # jdvlib: --- END IMPORTS ---
 
+# @section args
+# @description Functions to help with parsing and validation of command line arguments.
 
 # @description If any of the arguments are -h or --help, run the help function and exit.
 # It does not do anything with the rest of the arguments.
@@ -73,6 +75,13 @@ args::ensure_num_args_between() {
     fi
 }
 
+# @description Check if a value matches an expected flag string.
+#   Prints "true" if the values match, "false" otherwise.
+#
+# @arg $1 string The expected flag value.
+# @arg $2 string The actual value to compare.
+#
+# @stdout "true" if the values match, "false" otherwise.
 args::flag_value() {
     local expected=$1
     local value=$2

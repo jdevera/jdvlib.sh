@@ -17,9 +17,14 @@ meta::import ui
 
 # jdvlib: --- END IMPORTS ---
 
+# @section env
+# @description Functions used to manage environment variables.
 
-# Load a .env file from the current directory or from the specified path
-# @arg $1 string The path to the .env file (optional)
+# @description Load a .env file into the current shell environment.
+#   Sources the file at the given path, or .env in the current directory
+#   if no path is specified.
+#
+# @option -f string Path to the .env file (default: .env).
 env::dotenv_load() {
     local env_file
     if [[ $1 == '-f' ]]; then
@@ -36,6 +41,11 @@ env::dotenv_load() {
 }
 
 
+# @description Delete one or more variables from a .env file.
+#   Removes lines matching the given variable names from the file.
+#
+# @option -f string Path to the .env file (default: ./.env).
+# @arg $@ string Variable names to delete.
 env::dotenv_delete() {
     local env_file
     if [[ $1 == '-f' ]]; then
@@ -56,6 +66,12 @@ env::dotenv_delete() {
     done
 }
 
+# @description Save one or more variables to a .env file.
+#   Writes the current value of each named variable to the file,
+#   replacing any existing entry for the same variable.
+#
+# @option -f string Path to the .env file (default: .env).
+# @arg $@ string Variable names to save.
 env::dotenv_save() {
     local env_file
     if [[ $1 == '-f' ]]; then
@@ -75,6 +91,13 @@ env::dotenv_save() {
 }
 
 
+# @description Ensure that a variable is set and non-empty.
+#   Exits with an error if the variable is empty.
+#
+# @arg $1 string The name of the variable to check (not the value).
+#
+# @exitcode 0 If the variable is set.
+# @exitcode 1 Exits via ui::die if the variable is empty.
 env::ensure_is_set() {
     local -n __var=$1
     if [[ -z $__var ]]; then

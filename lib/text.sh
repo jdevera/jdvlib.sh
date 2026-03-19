@@ -17,8 +17,16 @@ meta::import ui
 
 # jdvlib: --- END IMPORTS ---
 
+# @section text
+# @description Functions that relate to text manipulation.
 
-# Take two arrays that represent columns and print them aligned
+# @description Print two arrays as left-aligned columns.
+#   The left column width is determined by the longest entry.
+#
+# @arg $1 array The left column array (nameref).
+# @arg $2 array The right column array (nameref).
+#
+# @stdout The aligned two-column output.
 text::print_aligned() {
     local -n left=$1
     local -n right=$2
@@ -68,6 +76,16 @@ text::replace_between_markers_legacy() {
     ' "$file" >tmpfile && mv tmpfile "$file"
 }
 
+# @description Replace the content between two markers in a text stream.
+#   If the markers are not present, append the markers and new content.
+#   The markers themselves are preserved.
+#
+# @arg $1 string The start marker.
+# @arg $2 string The end marker.
+# @arg $3 string The new content to place between the markers.
+# @arg $@ string Optional input files (reads from stdin if none).
+#
+# @stdout The modified text.
 text::replace_inside_markers() {
     local start_marker=$1
     local end_marker=$2
@@ -112,6 +130,16 @@ text::replace_inside_markers() {
 
 }
 
+# @description Delete content between two markers, keeping the markers.
+#
+# @arg $1 string The start delimiter.
+# @arg $2 string The end delimiter.
+# @arg $@ string Optional input files (reads from stdin if none).
+#
+# @stdout The text with content between markers removed.
+#
+# @exitcode 0 If the start marker was found.
+# @exitcode 1 If the start marker was not found.
 text::delete_inside_markers() {
     local start_delim="$1"
     local end_delim="$2"
@@ -130,6 +158,16 @@ text::delete_inside_markers() {
 }
 
 
+# @description Delete the markers and all content between them.
+#
+# @arg $1 string The start delimiter.
+# @arg $2 string The end delimiter.
+# @arg $@ string Optional input files (reads from stdin if none).
+#
+# @stdout The text with the marker block entirely removed.
+#
+# @exitcode 0 If the start marker was found.
+# @exitcode 1 If the start marker was not found.
 text::delete_around_markers() {
     local start_delim="$1"
     local end_delim="$2"
@@ -146,8 +184,12 @@ text::delete_around_markers() {
     ' "$@" && return 0 || return 1
 }
 
-# Apply a filter to a file and write the result bak to the same file
-# meant to be used with the filters in this module
+# @description Apply a filter command to a file in place.
+#   The filter reads from stdin and writes to stdout. The result
+#   replaces the original file content.
+#
+# @arg $1 string The filter command to apply.
+# @arg $2 string The file to modify in place.
 text::apply_in_place() {
 
     local filter=$1
@@ -158,6 +200,14 @@ text::apply_in_place() {
     $filter <"$file" >"$tmpfile" && mv "$tmpfile" "$file"
 }
 
+# @description Read and print only the content between two markers.
+#   The markers themselves are excluded from the output.
+#
+# @arg $1 string The start delimiter.
+# @arg $2 string The end delimiter.
+# @arg $@ string Optional input files (reads from stdin if none).
+#
+# @stdout The content between the markers.
 text::read_inside_markers() {
     local start_delim="$1"
     local end_delim="$2"
@@ -170,6 +220,15 @@ text::read_inside_markers() {
     ' "$@"
 }
 
+# @description Apply a printf format string to each line between two markers.
+#   Lines outside the markers and the markers themselves are printed as-is.
+#
+# @arg $1 string The start delimiter.
+# @arg $2 string The end delimiter.
+# @arg $3 string The printf format string to apply to each line.
+# @arg $@ string Optional input files (reads from stdin if none).
+#
+# @stdout The text with formatted content between markers.
 text::format_inside_markers() {
     local start_delim=$1
     local end_delim=$2
@@ -192,11 +251,27 @@ text::format_inside_markers() {
     ' "$@"
 }
 
+# @description Comment out all lines between two markers by prefixing them with "# ".
+#
+# @arg $1 string The start delimiter.
+# @arg $2 string The end delimiter.
+#
+# @see text::format_inside_markers()
 text::comment_out_inside_markers() {
     text::format_inside_markers "$1" "$2" "# %s"
 }
 
 
+# @description Apply a shell filter to lines between two markers.
+#   Each line between the markers is piped through the filter command.
+#   Lines outside the markers are printed as-is.
+#
+# @arg $1 string The start delimiter.
+# @arg $2 string The end delimiter.
+# @arg $3 string The filter command to apply to each line.
+# @arg $4 string Optional input file (reads from stdin if empty).
+#
+# @stdout The text with filtered content between markers.
 text::filter_inside_markers() {
     local start_delim=$1
     local end_delim=$2

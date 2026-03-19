@@ -19,7 +19,17 @@ meta::import func
 
 # jdvlib: --- END IMPORTS ---
 
+# @section fs
+# @description Functions related to the filesystem, including existence checks, permissions, and mount detection.
 
+# @description Check if a file is owned by a specific user.
+#   Works on both Linux and macOS.
+#
+# @arg $1 string The file path.
+# @arg $2 string The username to check ownership against.
+#
+# @exitcode 0 If the file is owned by the user.
+# @exitcode 1 If the file is not owned by the user.
 fs::is_owned_by_user() {
     local file=$1
     local user=$2
@@ -35,6 +45,9 @@ fs::is_owned_by_user() {
 
 }
 
+# @description Ensure that a file exists, exit with an error if it does not.
+#
+# @arg $1 string The file path to check.
 fs::ensure_file_exists() {
     local file=$1
     if [[ ! -f "$file" ]]; then
@@ -43,6 +56,9 @@ fs::ensure_file_exists() {
     ui::reassure "File $file exists"
 }
 
+# @description Ensure that a directory exists, exit with an error if it does not.
+#
+# @arg $1 string The directory path to check.
 fs::ensure_dir_exists() {
     local dir=$1
     if [[ ! -d "$dir" ]]; then
@@ -51,8 +67,14 @@ fs::ensure_dir_exists() {
     ui::reassure "Directory $dir exists"
 }
 
-# check if the given file is in a cifs or nfs mount
-# admit also nested paths
+# @description Check if a path resides on a CIFS or NFS remote mount.
+#   Walks up the directory tree looking for a mountpoint and checks
+#   whether it is a remote filesystem type.
+#
+# @arg $1 string The file or directory path to check.
+#
+# @exitcode 0 If the path is on a remote mount.
+# @exitcode 1 If the path is not on a remote mount.
 fs::is_in_remote_mount() {
     local path=$1
     if [[ ! -d $path ]]; then
@@ -73,6 +95,9 @@ fs::is_in_remote_mount() {
     return 1
 }
 
+# @description Ensure that a path is on a remote mount, exit with an error if not.
+#
+# @arg $1 string The path to check.
 fs::ensure_in_remote_mount() {
     local path=$1
     func::ensure fs::is_in_remote_mount \
@@ -81,6 +106,14 @@ fs::ensure_in_remote_mount() {
         "$path"
 }
 
+# @description Check if a user can write to a directory.
+#   Tests write access by attempting to create a temporary file as the user.
+#
+# @arg $1 string The username.
+# @arg $2 string The directory path.
+#
+# @exitcode 0 If the user can write to the directory.
+# @exitcode 1 If the user cannot write to the directory.
 fs::can_user_write_to_dir() {
     local user=$1
     local dir=$2

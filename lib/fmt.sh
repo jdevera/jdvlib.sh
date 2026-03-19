@@ -18,6 +18,9 @@ meta::import sys
 
 # jdvlib: --- END IMPORTS ---
 
+# @section fmt
+# @description Functions to format data.
+
 declare -gA __BYTES_CONVERSION_TABLE=(
     [B]=1
     [KB]=1024
@@ -61,17 +64,18 @@ fmt::__get_unit_magnitude() {
     echo "$magnitude"
 }
 
-# @description Takes bytes and formats them into a human-readable format.
-# Units table:
-# | Symbol | Name      | ~Bytes (approx) |
-# |--------|-----------|-----------------|
-# | B      | Byte      | 1               |
-# | KB     | Kilobyte  | 10^3            |
-# | MB     | Megabyte  | 10^6            |
-# | GB     | Gigabyte  | 10^9            |
-# | TB     | Terabyte  | 10^12           |
-# | PB     | Petabyte  | 10^15           |
-# | EB     | Exabyte   | 10^18           |
+# @description Format a byte count into a human-readable string.
+#   Automatically selects the most appropriate unit (B, KB, MB, GB, TB, PB, EB).
+#   An optional maximum unit can be specified to cap the conversion.
+#
+# @arg $1 number The number of bytes.
+# @arg $2 string Optional maximum unit to use (default: EB).
+#
+# @stdout The formatted value with unit (e.g. "1.50 GB").
+#
+# @example
+#   fmt::bytes 1536       # prints "1.50 KB"
+#   fmt::bytes 1073741824 # prints "1.00 GB"
 fmt::bytes() {
     local bytes=$1
     local max_unit=${2:-EB}
@@ -93,7 +97,12 @@ fmt::bytes() {
     fmt::bytes_to "$bytes" "$unit"
 }
 
-# Function to convert bytes to a given unit
+# @description Convert a byte count to a specific unit.
+#
+# @arg $1 number The number of bytes.
+# @arg $2 string The target unit (B, KB, MB, GB, TB, PB, or EB).
+#
+# @stdout The converted value with unit (e.g. "2.50 MB").
 fmt::bytes_to() {
     local bytes=$1
     local unit=$2

@@ -163,6 +163,19 @@ library_metadata() {
     echo "__JDVLIB_BUILD_DATE='$(date -u +'%Y-%m-%d')'"
 }
 
+library_shdoc() {
+    cat <<'SHDOC'
+
+# @name jdvlib.sh
+# @brief A library of bash functions for use in other scripts.
+# @description
+#     JDVLib.sh is a Bash function library providing utilities for system
+#     detection, text manipulation, file operations, user management,
+#     ANSI terminal formatting, and more.
+
+SHDOC
+}
+
 target_lib() {
     set_version
     local header_file=./templates/header.sh
@@ -173,6 +186,7 @@ target_lib() {
     init_dest_file --truncate
     out "$header_file"
     library_metadata | out
+    library_shdoc | out
 
     local file
     while IFS= read -r file; do

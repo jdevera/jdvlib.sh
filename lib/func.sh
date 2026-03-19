@@ -17,21 +17,22 @@ meta::import ui
 
 # jdvlib: --- END IMPORTS ---
 
+# @section func
+# @description Functions related to functions and function management.
+
 # @description Check if a function exists
 # @arg $1 string The function name to check
 func::exists() {
     declare -f -F "$1" >/dev/null
 }
 
-# A function that can be used to ensure boolean functions return true.
+# @description Ensure a boolean function returns true, exit with an error otherwise.
+#   Intended to be used to create ensure_ wrapper functions in the library.
 #
-# This is mostly intended to be used to create ensure_ functions in the library.
-#
-# @arg $1 string The function to run
-# @arg $2 string The error message to display if the function returns false
-# @arg $3 string The reassurance message to display if the function returns true
-# @arg $@ array The arguments to pass to the function
-#
+# @arg $1 string The function to run.
+# @arg $2 string The error message to display if the function returns false.
+# @arg $3 string The reassurance message to display if the function returns true.
+# @arg $@ string The arguments to pass to the function.
 func::ensure() {
     local func=$1
     local error_message=$2
@@ -81,6 +82,16 @@ func::call_first_of() {
     func::call_first_matching func::exists "$@"
 }
 
+# @description List all functions defined in a shell script file.
+#   Sources the file in a subshell and inspects declared functions to find
+#   those whose definition originates from the given file.
+#
+# @arg $1 string The path to the shell script file.
+#
+# @stdout One function name per line.
+#
+# @exitcode 0 On success.
+# @exitcode 1 If the file does not exist.
 func::list_functions_in_file() {
     local file=$1
     local extdebug_was_off=0

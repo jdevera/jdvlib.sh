@@ -17,6 +17,9 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/_meta.sh"
 
 # jdvlib: --- END IMPORTS ---
 
+# @section ansi
+# @description ANSI escape code utilities for text styling, cursor control, display manipulation, and terminal operations.
+
 __ANSI_ESC=$'\033'
 __ANSI_CSI="${__ANSI_ESC}["
 __ANSI_OSC="${__ANSI_ESC}]"

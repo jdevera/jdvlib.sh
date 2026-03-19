@@ -21,7 +21,7 @@ teardown() {
 @test "test_can_run_lib" {
     run bash "$JDVLIB_COMPILED_PATH"
     assert_success
-    assert_output_contains 'JDVLib.sh - A library of bash functions for use in other scripts.'
+    assert_output_contains 'A library of bash functions for use in other scripts.'
     assert_output_contains 'Version: '
 }
 

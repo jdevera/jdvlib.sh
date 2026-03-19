@@ -17,10 +17,18 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/_meta.sh"
 
 # jdvlib: --- END IMPORTS ---
 
-# Use extra_level if you are calling this from included files
-# rather than a script directly.
-# Collapses repeated adjacent BASH_SOURCE entries to handle cases
-# where scripts are sourced multiple times.
+# @section code
+# @description Functions that relate to the code itself, where it is located, and how it is used.
+
+# @description Get the directory of the calling script.
+#   Use extra_level if you are calling this from included files
+#   rather than a script directly.
+#   Collapses repeated adjacent BASH_SOURCE entries to handle cases
+#   where scripts are sourced multiple times.
+#
+# @arg $1 number Optional extra stack level offset (default: 0).
+#
+# @stdout The absolute path to the directory containing the calling script.
 code::script_dir() {
     local -i extra_level=${1:-0}
     local -a collapsed_sources
@@ -41,6 +49,12 @@ code::script_dir() {
     echo "$dir"
 }
 
+# @description Check if the current script is being sourced rather than executed directly.
+#
+# @noargs
+#
+# @exitcode 0 If the script is being sourced.
+# @exitcode 1 If the script is being executed directly.
 code::is_sourced() {
     [[ "${BASH_SOURCE[1]}" != "${0}" ]]
 }
