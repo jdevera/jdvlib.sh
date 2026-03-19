@@ -144,7 +144,7 @@ attach_module_code() {
     if_dest_is_file ui::echo_step "Attaching file: $name"
     {
         echo -e "\n## --- Begin File: $name --- [[["
-        cat "$file" | comment_out_imports
+        comment_out_imports < "$file"
         echo -e "\n## --- End File: $name --- ]]]"
     } | out
 }
