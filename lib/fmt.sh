@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-: <<'jdvlib:doc'
-Functions to format data.
-jdvlib:doc
 
 # jdvlib: --- BEGIN IMPORTS ---
 #

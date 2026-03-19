@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-: <<'jdvlib:doc'
-Functions that relate to text manipulation.
-jdvlib:doc
 
 # jdvlib: --- BEGIN IMPORTS ---
 #

@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-: <<'jdvlib:doc'
-Functions that support the library.
-This module is the basis for imports, so there should never be an import of this file.
-jdvlib:doc
 
 # @section meta
 # @description Functions that support the library.

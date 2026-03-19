@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-: <<'jdvlib:doc'
-Functions ...
-jdvlib:doc
+# @section module_name
+# @description Module description.
 
 # jdvlib: --- BEGIN IMPORTS ---
 #

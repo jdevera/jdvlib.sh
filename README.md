@@ -41,9 +41,7 @@ This module is the basis for imports, so there should never be an import of this
 
 ### Module `ansi`
 
-ANSI escape code utilities for text styling, cursor control, display
-manipulation, and terminal operations. Organized into four functions:
-ansi::style, ansi::cursor, ansi::display, and ansi::term.
+ANSI escape code utilities for text styling, cursor control, display manipulation, and terminal operations.
 
 #### Functions
 
@@ -87,7 +85,7 @@ Functions used to manage environment variables.
 
 ### Module `fs`
 
-Functions related to the filesystem. Existance, permissions, etc.
+Functions related to the filesystem, including existence checks, permissions, and mount detection.
 
 #### Functions
 

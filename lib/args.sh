@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-: <<'jdvlib:doc'
-Functions to help with parsing and validation of command line arguments.
-jdvlib:doc
 
 # jdvlib: --- BEGIN IMPORTS ---
 #

@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-: <<'jdvlib:doc'
-Functions related to Proxmox Virtual Environment (PVE).
-jdvlib:doc
 
 # jdvlib: --- BEGIN IMPORTS ---
 #

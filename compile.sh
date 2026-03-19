@@ -196,6 +196,12 @@ target_lib() {
     out "$footer_file"
 }
 
+get_section_description() {
+    local file=$1
+    shdoc-ng generate --format json -i "$file" \
+        | jq -r '[.functions[] | select(.is_first_in_section) | .section_description][0]'
+}
+
 get_module_doc() {
     local with_functions
     local -a args
@@ -207,10 +213,7 @@ get_module_doc() {
     module_name=$(basename -s .sh "$file")
     echo "### Module \`$module_name\`"
     echo
-    text::read_inside_markers \
-        ": <<'jdvlib:doc'" \
-        "jdvlib:doc" \
-        "$file"
+    get_section_description "$file"
     echo
     if [[ $with_functions == 'true' ]]; then
         echo "#### Functions"

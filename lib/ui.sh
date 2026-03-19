@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-: <<'jdvlib:doc'
-Functions to interact with the user.
-jdvlib:doc
 
 # jdvlib: --- BEGIN IMPORTS ---
 #

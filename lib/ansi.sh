@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-: <<'jdvlib:doc'
-ANSI escape code utilities for text styling, cursor control, display
-manipulation, and terminal operations. Organized into four functions:
-ansi::style, ansi::cursor, ansi::display, and ansi::term.
-jdvlib:doc
 
 # jdvlib: --- BEGIN IMPORTS ---
 #
