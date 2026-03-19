@@ -29,22 +29,29 @@ teardown() {
 
     # shellcheck source=./../lib/func.sh
     meta::import func
-    functions_file="functions.txt"
-    functions_compiled_file="functions_compiled.txt"
+    functions_file="$BATS_TEST_TMPDIR/functions.txt"
+    functions_compiled_file="$BATS_TEST_TMPDIR/functions_compiled.txt"
 
-    meta::for_each_library_module func::list_functions_in_file |
-        sort |
-        grep -v '^source$' \
-        > "$BATS_TEST_TMPDIR/$functions_file"
+    # Run module listing in parallel: one job per module + one for compiled
+    local tmpdir="$BATS_TEST_TMPDIR/parts"
+    mkdir -p "$tmpdir"
+
+    local file i=0
+    while IFS= read -r file; do
+        func::list_functions_in_file "$__JDVLIB_PATH/$file" > "$tmpdir/$i" &
+        i=$((i + 1))
+    done < <(awk '/^source / { print $2 }' "$__JDVLIB_PATH/lib.sh")
 
     func::list_functions_in_file "$JDVLIB_COMPILED_PATH" |
         sort |
         grep -v '^source$' \
-        > "$BATS_TEST_TMPDIR/$functions_compiled_file"
+        > "$functions_compiled_file" &
 
-    pushd "$BATS_TEST_TMPDIR" > /dev/null || return 1
+    wait
+
+    sort "$tmpdir"/* | grep -v '^source$' > "$functions_file"
+
     run diff -u "$functions_file" "$functions_compiled_file"
     assert_success
     assert_output ""
-    popd > /dev/null || return 1
 }

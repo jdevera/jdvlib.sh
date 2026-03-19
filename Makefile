@@ -38,8 +38,20 @@ check:
 checkdist: build/jdvlib.sh
 	shellcheck build/jdvlib.sh
 
+BATS := ./test/bats/bin/bats
+BATS_PARALLEL_BACKEND := $(shell command -v parallel 2>/dev/null || command -v rush 2>/dev/null)
+NCPUS := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+ifdef BATS_PARALLEL_BACKEND
+BATS_JOBS := --jobs $(NCPUS)
+endif
+
 test:
-	@./test/bats/bin/bats test
+ifndef BATS_PARALLEL_BACKEND
+	@echo "# Note: Install GNU parallel or rush to run tests in parallel"
+else
+	@echo "# Running tests with $(NCPUS) parallel jobs"
+endif
+	@$(BATS) $(BATS_JOBS) test
 
 docker: $(LIB_FILES) $(TEMPLATES) Dockerfile
 	@docker build -t jdvlib .

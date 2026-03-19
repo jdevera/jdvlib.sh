@@ -124,7 +124,7 @@ teardown() {
 @test 'test_ask_mocked_read' {
     source args.sh
 
-    read() { local -n __mock_var=$4; __mock_var="mocked"; }
+    read() { [[ -n ${4:-} ]] || return 0; local -n __mock_var=$4; __mock_var="mocked"; }
 
     enable_read_builtin() { enable read; }
     disable_read_builtin() { enable -n read; }
