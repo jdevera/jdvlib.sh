@@ -9,7 +9,6 @@ source _meta.sh
 source ansi.sh
 source args.sh
 source code.sh
-source compat.sh
 source env.sh
 source fs.sh
 source func.sh
