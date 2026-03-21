@@ -53,6 +53,19 @@ teardown() {
     assert_output "✗ User non_existent_user does not exist"
 }
 
+@test "test_group_exists_known_group" {
+    # On macOS, 'staff' is a known group; on Linux, 'root' is
+    if sys::is_macos; then
+        run user::group_exists staff
+    else
+        run user::group_exists root
+    fi
+    assert_success
+
+    run user::group_exists non_existent_group_xyzzy
+    assert_failure
+}
+
 @test "test_group_exists" {
     skip_unless_root
     run user::group_exists root

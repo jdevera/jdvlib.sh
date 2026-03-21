@@ -11,6 +11,7 @@
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/_meta.sh"
 
 meta::import func
+meta::import sys
 meta::import ui
 
 # jdvlib: --- END IMPORTS ---
@@ -74,7 +75,6 @@ user::group_exists() {
     else
         getent group "$group" &>/dev/null
     fi
-    getent group "$group" &>/dev/null
 }
 
 # @description Ensure a group exists, exit with an error if not.
