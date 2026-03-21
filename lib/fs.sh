@@ -81,7 +81,7 @@ fs::is_in_remote_mount() {
     while [[ $path != '/' ]]; do
         if mountpoint -q "$path"; then
             # check if the mount is cifs or nfs
-            if mount | grep -qE "on $path type [cifs|nfs]"; then
+            if mount | grep -F "on $path type " | grep -qE '(cifs|nfs)'; then
                 return 0
             else
                 return 1
