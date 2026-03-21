@@ -160,7 +160,6 @@ Functions that relate to text manipulation.
 - `text::format_inside_markers`
 - `text::print_aligned`
 - `text::read_inside_markers`
-- `text::replace_between_markers_legacy`
 - `text::replace_inside_markers`
 
 ### Module `ui`

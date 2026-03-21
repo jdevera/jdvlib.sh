@@ -39,40 +39,6 @@ text::print_aligned() {
     done
 }
 
-# @description Replace the content between two markers in a file.
-# If the markers are not present, append to the file and add the markers.
-# In any case keep the markers.
-#
-# @arg $1 string The file to edit
-# @arg $2 string The start marker
-# @arg $3 string The end marker
-# @stdin The new content to replace between the markers
-text::replace_between_markers_legacy() {
-    ui::deprecate "text::replace_between_markers_legacy" "text::apply_in_place text::replace_inside_markers"
-    local file=$1
-    local start_marker=${2:-'#--SETUP-START--'}
-    local end_marker=${3:-'#--SETUP-END--'}
-    local new_content
-    new_content=$(cat)
-
-    if ! grep -q "$start_marker" "$file"; then
-        {
-            echo "$start_marker"
-            echo "$new_content"
-            echo "$end_marker"
-        } >>"$file"
-        return
-    fi
-
-    # Use awk to replace content between markers, ensuring the entire line matches the markers
-    awk -v start="^$start_marker\$" -v end="^$end_marker\$" -v content="$new_content" '
-    BEGIN {print_content=1}
-    $0 ~ start {print $0; print content; print_content=0}
-    $0 ~ end {print_content=1}
-    print_content {print}
-    ' "$file" >tmpfile && mv tmpfile "$file"
-}
-
 # @description Replace the content between two markers in a text stream.
 #   If the markers are not present, append the markers and new content.
 #   The markers themselves are preserved.
