@@ -223,7 +223,7 @@ sys::run_as() {
     if [[ $USER == "$user" ]]; then
         command=("$@")
     elif user::is_root; then
-        command=(su - "$user" -c "$*")
+        command=(su - "$user" -c "$(printf '%q ' "$@")")
     else
         command=(sudo -u "$user" "$@")
     fi
