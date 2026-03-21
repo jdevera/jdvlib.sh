@@ -57,7 +57,7 @@ env::dotenv_delete() {
     fi
     while [[ $# -gt 0 ]]; do
         if grep -q "^$1=" "$env_file"; then
-            sed -i -e "/^$1=/d" "$env_file"
+            grep -v "^$1=" "$env_file" > "$env_file.tmp" && mv "$env_file.tmp" "$env_file"
         fi
         shift
     done

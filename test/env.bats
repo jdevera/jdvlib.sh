@@ -152,6 +152,26 @@ do_test_dotenv_delete() {
     refute_set MY_TEST_VAR3
 }
 
+@test "test_dotenv_delete_no_backup_file" {
+    cd "$BATS_TEST_TMPDIR"
+    echo "MY_TEST_VAR=grumpy" > .env
+    echo "MY_TEST_VAR2=happy" >> .env
+
+    run env::dotenv_delete MY_TEST_VAR
+    assert_success
+
+    # Ensure no -e backup file was created (macOS sed -i bug)
+    run ls .env-e
+    assert_failure
+    run ls .env.tmp
+    assert_failure
+
+    run_light env::dotenv_load
+    assert_success
+    refute_set MY_TEST_VAR
+    assert_set MY_TEST_VAR2
+}
+
 @test "test_dotenv_delete_non_existent_file_succeeds" {
     run env::dotenv_delete -f non_existent_file MY_TEST_VAR
     assert_success
