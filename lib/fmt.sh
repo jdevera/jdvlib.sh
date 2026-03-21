@@ -77,6 +77,16 @@ fmt::bytes() {
     local bytes=$1
     local max_unit=${2:-EB}
 
+    if [[ $bytes -lt 0 ]] 2>/dev/null; then
+        ui::fail "fmt::bytes: negative value: $bytes"
+        return 1
+    fi
+
+    if [[ $bytes -eq 0 ]] 2>/dev/null; then
+        echo "0 B"
+        return 0
+    fi
+
     local -i magnitude
     magnitude=$(awk "BEGIN {print int(log($bytes) / log(1024))}")
 

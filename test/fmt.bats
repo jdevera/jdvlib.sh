@@ -25,11 +25,19 @@ teardown() {
         assert_output "1.67 $unit"
     done
 
-    run fmt::bytes 0
-    assert_output "0.00 B"
-
     run fmt::bytes 1
     assert_output "1.00 B"
+}
+
+@test "test_bytes_zero" {
+    run fmt::bytes 0
+    assert_success
+    assert_output "0 B"
+}
+
+@test "test_bytes_negative" {
+    run fmt::bytes -1
+    assert_failure
 }
 
 @test "test_bytes_to_human_readable_max_unit" {
