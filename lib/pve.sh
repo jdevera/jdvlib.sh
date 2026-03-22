@@ -45,7 +45,7 @@ pve::ensure_pve() {
 # @exitcode 1 If not running inside an LXC container.
 pve::is_lxc() {
     [[ -f /proc/1/environ ]] &&
-        grep -q container=lxc /proc/1/environ
+        tr '\0' '\n' < /proc/1/environ 2>/dev/null | grep -qx 'container=lxc'
 }
 
 # @description Ensure the current environment is an LXC container, exit with an error if not.
