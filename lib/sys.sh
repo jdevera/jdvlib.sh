@@ -97,18 +97,13 @@ sys::ensure_debian() {
 
 # @description Get arch (amd64 or arm64) on linux or macos
 sys::get_arch() {
-    local arch
-    arch=$(uname -s)
-    case $arch in
-    Linux)
-        dpkg --print-architecture
-        ;;
-    Darwin)
-        uname -m
-        ;;
-    *)
-        ui::die "Unsupported OS: $(uname -s)"
-        ;;
+    local raw
+    raw=$(uname -m)
+    case $raw in
+        x86_64)  echo amd64 ;;
+        aarch64) echo arm64 ;;
+        arm64)   echo arm64 ;;
+        *)       echo "$raw" ;;
     esac
 }
 

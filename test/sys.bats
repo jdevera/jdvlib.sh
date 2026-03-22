@@ -151,44 +151,33 @@ fake_uname() {
     export -f uname
     register_teardown "unset -f uname"
 
-    log_step "Linux amd64"
-    # shellcheck disable=SC2031,SC2030 # It's okay to be changed within the test subshell
-    export __test_uname_m_answer=''
-    # shellcheck disable=SC2031,SC2030 # It's okay to be changed within the test subshell
-    export __test_uname_s_answer=Linux
+    # shellcheck disable=SC2031,SC2030
+    export __test_uname_s_answer=''
 
-    # shellcheck disable=SC2317,SC2329 # This is mocking the command
-    dpkg() {
-        log_mock_call dpkg "amd64" "$@"
-        echo amd64
-    }
-    export -f dpkg
-    register_teardown "unset -f dpkg"
-
+    log_step "x86_64 -> amd64"
+    # shellcheck disable=SC2031,SC2030 # It's okay to be changed within the test subshell
+    export __test_uname_m_answer=x86_64
     run sys::get_arch
     assert_success
     assert_output "amd64"
 
-
-    log_step "MacOS arm64"
-
-    export __test_uname_s_answer=Darwin
-    export __test_uname_m_answer=arm64
-    dpkg() {
-        ui::die "Should not call dpkg"
-    }
-    export -f dpkg
-
+    log_step "aarch64 -> arm64"
+    export __test_uname_m_answer=aarch64
     run sys::get_arch
     assert_success
     assert_output "arm64"
 
-
-    log_step "PotatOS"
-    export __test_uname_s_answer=PotatOS
-    export __test_uname_m_answer=''
+    log_step "arm64 -> arm64"
+    export __test_uname_m_answer=arm64
     run sys::get_arch
-    assert_death "Unsupported OS: PotatOS"
+    assert_success
+    assert_output "arm64"
+
+    log_step "other -> passthrough"
+    export __test_uname_m_answer=riscv64
+    run sys::get_arch
+    assert_success
+    assert_output "riscv64"
 }
 
 @test "test_get_os" {
