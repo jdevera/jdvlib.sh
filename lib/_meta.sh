@@ -63,6 +63,10 @@ meta::module_is_running() {
 #
 # @arg $1 string The function to call for each module file.
 meta::for_each_library_module() {
+    if meta::lib_is_compiled; then
+        echo "meta::for_each_library_module: not available in compiled mode" >&2
+        return 1
+    fi
     local action=$1
     local file
     while IFS= read -r file; do

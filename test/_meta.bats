@@ -54,6 +54,13 @@ teardown() {
     assert_success
 }
 
+@test "test_for_each_library_module_fails_when_compiled" {
+    __JDVLIB_BUILD_DATE='2024-01-01'
+    run meta::for_each_library_module echo
+    assert_failure
+    assert_output --partial "not available in compiled mode"
+}
+
 @test "test_for_each_library_module" {
     local -a modules=()
     collect_module() {
