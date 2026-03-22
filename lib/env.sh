@@ -42,8 +42,15 @@ env::dotenv_load() {
         __jdvlib_env_file=.env
     fi
     if [[ -f $__jdvlib_env_file ]]; then
-        # shellcheck disable=SC1090
-        source "$__jdvlib_env_file"
+        local __jdvlib_line
+        while IFS= read -r __jdvlib_line; do
+            # Skip comments and blank lines
+            [[ $__jdvlib_line =~ ^[[:space:]]*(#|$) ]] && continue
+            # Only eval lines that look like variable assignments
+            [[ $__jdvlib_line =~ ^[A-Za-z_][A-Za-z0-9_]*= ]] || continue
+            # shellcheck disable=SC2163
+            eval "export $__jdvlib_line"
+        done < "$__jdvlib_env_file"
     fi
 }
 

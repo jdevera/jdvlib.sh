@@ -66,6 +66,44 @@ teardown() {
     assert_success
 }
 
+@test "test_dotenv_load_comments_and_blanks" {
+    cd "$BATS_TEST_TMPDIR"
+    cat > .env <<'EOF'
+# This is a comment
+MY_TEST_VAR=hello
+
+# Another comment
+MY_TEST_VAR2=world
+EOF
+
+    refute_set MY_TEST_VAR
+    refute_set MY_TEST_VAR2
+
+    run_light env::dotenv_load
+    assert_success
+    assert_set MY_TEST_VAR
+    assert_set MY_TEST_VAR2
+    assert_equal "hello" "$MY_TEST_VAR"
+    assert_equal "world" "$MY_TEST_VAR2"
+}
+
+@test "test_dotenv_load_skips_malicious_lines" {
+    cd "$BATS_TEST_TMPDIR"
+    local marker_file="$BATS_TEST_TMPDIR/should_not_exist"
+    cat > .env <<EOF
+MY_TEST_VAR=safe
+touch $marker_file
+MY_TEST_VAR2=also_safe
+EOF
+
+    run_light env::dotenv_load
+    assert_success
+    assert_set MY_TEST_VAR
+    assert_set MY_TEST_VAR2
+    # The malicious line should not have been executed
+    [[ ! -f "$marker_file" ]]
+}
+
 @test "test_dotenv_load_many_vars" {
     cd "$BATS_TEST_TMPDIR"
     local env_file=$BATS_TEST_TMPDIR/.env
