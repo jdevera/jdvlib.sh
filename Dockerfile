@@ -2,6 +2,7 @@ FROM debian:12-slim
 LABEL authors="Jacobo de Vera"
 
 RUN apt-get update && apt-get install -y \
+    bc \
     make \
     git \
     ;
