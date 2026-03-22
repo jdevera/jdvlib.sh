@@ -201,7 +201,7 @@ ansi::style() {
 
             # End of flags
             --)                 shift; text+="$*"; break ;;
-            -*)                 ;; # ignore unknown flags
+            -*)                 echo "ansi::style: unknown flag '$1'" >&2 ;;
             *)                  text+="$*"; break ;;
         esac
         shift

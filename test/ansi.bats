@@ -111,6 +111,13 @@ teardown() {
     [[ "$output" == *$'\033[0m'* ]]
 }
 
+@test "test_style_unknown_flag_warns" {
+    FORCE_COLOR=1 run ansi::style --nonexistent "hello"
+    assert_success
+    # stderr should contain the warning
+    [[ "$output" == *"unknown flag '--nonexistent'"* ]]
+}
+
 # --- ansi::cursor ---
 
 @test "test_cursor_up" {
