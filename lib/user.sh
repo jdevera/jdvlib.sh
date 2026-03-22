@@ -98,7 +98,7 @@ user::ensure_group_exists() {
 user::is_in_group() {
     local user=$1
     local group=$2
-    groups "$user" | grep -q "\b$group\b"
+    id -nG "$user" | tr ' ' '\n' | grep -qxF "$group"
 }
 
 # @description Ensure a user belongs to a group, exit with an error if not.

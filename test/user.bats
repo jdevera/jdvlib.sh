@@ -81,6 +81,19 @@ teardown() {
     assert_success
 }
 
+@test "test_is_in_group_current_user" {
+    local user
+    user=$(id -un)
+    # The current user should be in at least one group
+    local first_group
+    first_group=$(id -nG "$user" | awk '{print $1}')
+    run user::is_in_group "$user" "$first_group"
+    assert_success
+
+    run user::is_in_group "$user" "non_existent_group_xyzzy"
+    assert_failure
+}
+
 @test "test_is_in_group" {
     skip_unless_root
     run user::is_in_group root root
