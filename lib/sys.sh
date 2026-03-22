@@ -63,7 +63,7 @@ sys::ensure_has_commands() {
 # @exitcode 1 If the directory is not in the PATH.
 sys::is_in_path() {
     local dir=$1
-    echo "$PATH" | tr ':' '\n' | grep -q "^${dir}$"
+    echo "$PATH" | tr ':' '\n' | grep -qxF "$dir"
 }
 
 # @description Ensure that a directory is in the PATH

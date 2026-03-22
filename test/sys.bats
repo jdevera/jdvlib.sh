@@ -70,6 +70,19 @@ backup_path() {
     assert_success
 }
 
+@test "test_is_in_path_with_dot" {
+    backup_path
+    # shellcheck disable=SC2030,SC2031 # It's okay for this modification to be local
+    export PATH="/tmp/my.dir:$PATH"
+
+    run sys::is_in_path /tmp/my.dir
+    assert_success
+
+    # A dot in regex would match any char; /tmp/myXdir should NOT match
+    run sys::is_in_path /tmp/myXdir
+    assert_failure
+}
+
 @test "test_ensure_in_path" {
     backup_path
 
