@@ -17,6 +17,16 @@ meta::import ui
 # @section env
 # @description Functions used to manage environment variables.
 
+# @description Validate that a string is a valid shell variable name.
+#
+# @arg $1 string The name to validate.
+#
+# @exitcode 0 If the name is valid.
+# @exitcode 1 If the name is invalid.
+env::__validate_var_name() {
+    [[ $1 =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]]
+}
+
 # @description Load a .env file into the current shell environment.
 #   Sources the file at the given path, or .env in the current directory
 #   if no path is specified.
@@ -56,6 +66,10 @@ env::dotenv_delete() {
         return
     fi
     while [[ $# -gt 0 ]]; do
+        if ! env::__validate_var_name "$1"; then
+            ui::fail "env::dotenv_delete: invalid variable name: $1"
+            return 1
+        fi
         if grep -q "^$1=" "$env_file"; then
             grep -v "^$1=" "$env_file" > "$env_file.tmp" && mv "$env_file.tmp" "$env_file"
         fi
@@ -79,6 +93,10 @@ env::dotenv_save() {
         env_file=.env
     fi
     while [[ $# -gt 0 ]]; do
+        if ! env::__validate_var_name "$1"; then
+            ui::fail "env::dotenv_save: invalid variable name: $1"
+            return 1
+        fi
         local -n ref=$1
         # if the var exists, remove it from the file first
         env::dotenv_delete -f "$env_file" "$1"
@@ -96,6 +114,9 @@ env::dotenv_save() {
 # @exitcode 0 If the variable is set.
 # @exitcode 1 Exits via ui::die if the variable is empty.
 env::ensure_is_set() {
+    if ! env::__validate_var_name "$1"; then
+        ui::die "env::ensure_is_set: invalid variable name: $1"
+    fi
     local -n __var=$1
     if [[ -z $__var ]]; then
         ui::die "Variable not set: $1"

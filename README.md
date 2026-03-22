@@ -78,6 +78,7 @@ Functions used to manage environment variables.
 
 #### Functions
 
+- `env::__validate_var_name`
 - `env::dotenv_delete`
 - `env::dotenv_load`
 - `env::dotenv_save`

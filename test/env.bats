@@ -237,6 +237,31 @@ do_test_dotenv_delete() {
     assert_equal 'value with $pecial "chars"' "$MY_TEST_VAR2"
 }
 
+@test "test_invalid_variable_names" {
+    cd "$BATS_TEST_TMPDIR"
+    echo "" > .env
+
+    # Empty name
+    run env::dotenv_delete ""
+    assert_failure
+
+    # Starts with digit
+    run env::dotenv_delete "1BAD"
+    assert_failure
+
+    # Contains dot
+    run env::dotenv_delete "bad.name"
+    assert_failure
+
+    # Save with invalid name
+    run env::dotenv_save "1BAD"
+    assert_failure
+
+    # Ensure with invalid name
+    run env::ensure_is_set "bad.name"
+    assert_failure
+}
+
 @test "test_dotenv_save_existing_entries" {
     cd "$BATS_TEST_TMPDIR"
     echo "MY_TEST_VAR=defo" > .env
