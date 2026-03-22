@@ -252,7 +252,7 @@ text::filter_inside_markers() {
 
     local inside_block=0
     local line
-    while read -r line; do
+    while IFS= read -r line; do
         if [[ $line =~ $start_delim ]]; then
             inside_block=1
             echo "$line"

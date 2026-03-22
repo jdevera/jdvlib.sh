@@ -346,6 +346,32 @@ EOF
     )"
 }
 
+@test "test_filter_inside_markers_preserves_indentation" {
+    local input
+    input=$(cat <<'EOF'
+Before
+#--START--
+    indented line
+        double indented
+#--END--
+After
+EOF
+    )
+    # shellcheck disable=SC2317,SC2329 # Invoked indirectly
+    filter() {
+        cat
+    }
+    run text::filter_inside_markers \
+        '#--START--' \
+        '#--END--' \
+        "filter" \
+        <<<"$input"
+
+    assert_success
+    assert_line --index 2 "    indented line"
+    assert_line --index 3 "        double indented"
+}
+
 @test "test_filter_inside_markers_line_removal" {
     local file="$BATS_TEST_TMPDIR/test_filter_line_removal.txt"
     dedent <<EOF >"$file"
