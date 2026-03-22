@@ -88,7 +88,7 @@ fmt::bytes() {
     fi
 
     local -i magnitude
-    magnitude=$(awk "BEGIN {print int(log($bytes) / log(1024))}")
+    magnitude=$(awk -v b="$bytes" 'BEGIN {print int(log(b) / log(1024))}')
 
     local unit=''
     if [[ -n "$max_unit" ]]; then
@@ -117,7 +117,7 @@ fmt::bytes_to() {
     local value
 
     conversion_factor=$(fmt::__get_unit_factor "$unit")
-    value=$(awk "BEGIN {printf \"%.2f\", $bytes / $conversion_factor}")
+    value=$(awk -v b="$bytes" -v f="$conversion_factor" 'BEGIN {printf "%.2f", b / f}')
 
     echo "$value $unit"
 }
