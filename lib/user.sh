@@ -119,6 +119,7 @@ user::ensure_in_group() {
 # @arg $1 string The username.
 # @arg $@ string The group names to add the user to.
 user::add_to_groups() {
+    sys::ensure_linux
     local user=$1
     shift
     for group in "$@"; do
@@ -130,6 +131,7 @@ user::add_to_groups() {
 #
 # @arg $1 string The username to create.
 user::create() {
+    sys::ensure_linux
     local user=$1
     useradd -m -s /bin/bash "$user"
 }

@@ -112,6 +112,20 @@ teardown() {
     assert_success
 }
 
+@test "test_add_to_groups_fails_on_macos" {
+    sys::is_macos || skip "macOS-only test"
+    run_stripped user::add_to_groups testuser testgroup
+    assert_failure
+    assert_output "✗ This is intended to run on a Linux system"
+}
+
+@test "test_create_user_fails_on_macos" {
+    sys::is_macos || skip "macOS-only test"
+    run_stripped user::create testuser
+    assert_failure
+    assert_output "✗ This is intended to run on a Linux system"
+}
+
 @test "test_add_to_groups" {
     skip_unless_root
     group="test_group"
