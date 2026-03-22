@@ -86,8 +86,9 @@ teardown() {
 
 @test "test_is_in_remote_mount_fails_on_macos" {
     sys::is_macos || skip "macOS-only test"
-    run fs::is_in_remote_mount /tmp
+    run_stripped fs::is_in_remote_mount /tmp
     assert_failure
+    assert_output "✗ This is intended to run on a Linux system"
 }
 
 @test "test_is_in_remote_mount" {

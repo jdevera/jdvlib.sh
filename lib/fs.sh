@@ -73,10 +73,7 @@ fs::ensure_dir_exists() {
 # @exitcode 0 If the path is on a remote mount.
 # @exitcode 1 If the path is not on a remote mount.
 fs::is_in_remote_mount() {
-    if ! sys::is_linux; then
-        ui::fail "fs::is_in_remote_mount: not supported on this platform"
-        return 1
-    fi
+    sys::ensure_linux
     local path=$1
     if [[ ! -d $path ]]; then
         path=$(dirname "$path")
