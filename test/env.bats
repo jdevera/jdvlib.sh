@@ -262,6 +262,24 @@ do_test_dotenv_delete() {
     assert_failure
 }
 
+@test "test_dotenv_save_var_named_ref" {
+    cd "$BATS_TEST_TMPDIR"
+    echo "" > .env
+
+    # 'ref' was previously a local in dotenv_save — verify no nameref collision
+    local ref="my_value"
+    local env_file="another_value"
+
+    run env::dotenv_save ref env_file
+    assert_success
+
+    unset ref env_file
+    run_light env::dotenv_load
+    assert_success
+    assert_equal "my_value" "$ref"
+    assert_equal "another_value" "$env_file"
+}
+
 @test "test_dotenv_save_existing_entries" {
     cd "$BATS_TEST_TMPDIR"
     echo "MY_TEST_VAR=defo" > .env

@@ -33,17 +33,17 @@ env::__validate_var_name() {
 #
 # @option -f string Path to the .env file (default: .env).
 env::dotenv_load() {
-    local env_file
+    local __jdvlib_env_file
     if [[ $1 == '-f' ]]; then
-        env_file=$2
+        __jdvlib_env_file=$2
         shift
         shift
     else
-        env_file=.env
+        __jdvlib_env_file=.env
     fi
-    if [[ -f $env_file ]]; then
+    if [[ -f $__jdvlib_env_file ]]; then
         # shellcheck disable=SC1090
-        source "$env_file"
+        source "$__jdvlib_env_file"
     fi
 }
 
@@ -54,15 +54,15 @@ env::dotenv_load() {
 # @option -f string Path to the .env file (default: ./.env).
 # @arg $@ string Variable names to delete.
 env::dotenv_delete() {
-    local env_file
+    local __jdvlib_env_file
     if [[ $1 == '-f' ]]; then
-        env_file=$2
+        __jdvlib_env_file=$2
         shift
         shift
     else
-        env_file='./.env'
+        __jdvlib_env_file='./.env'
     fi
-    if [[ ! -f $env_file ]]; then
+    if [[ ! -f $__jdvlib_env_file ]]; then
         return
     fi
     while [[ $# -gt 0 ]]; do
@@ -70,8 +70,8 @@ env::dotenv_delete() {
             ui::fail "env::dotenv_delete: invalid variable name: $1"
             return 1
         fi
-        if grep -q "^$1=" "$env_file"; then
-            grep -v "^$1=" "$env_file" > "$env_file.tmp" && mv "$env_file.tmp" "$env_file"
+        if grep -q "^$1=" "$__jdvlib_env_file"; then
+            grep -v "^$1=" "$__jdvlib_env_file" > "$__jdvlib_env_file.tmp" && mv "$__jdvlib_env_file.tmp" "$__jdvlib_env_file"
         fi
         shift
     done
@@ -84,23 +84,23 @@ env::dotenv_delete() {
 # @option -f string Path to the .env file (default: .env).
 # @arg $@ string Variable names to save.
 env::dotenv_save() {
-    local env_file
+    local __jdvlib_env_file
     if [[ $1 == '-f' ]]; then
-        env_file=$2
+        __jdvlib_env_file=$2
         shift
         shift
     else
-        env_file=.env
+        __jdvlib_env_file=.env
     fi
     while [[ $# -gt 0 ]]; do
         if ! env::__validate_var_name "$1"; then
             ui::fail "env::dotenv_save: invalid variable name: $1"
             return 1
         fi
-        local -n ref=$1
+        local -n __jdvlib_ref=$1
         # if the var exists, remove it from the file first
-        env::dotenv_delete -f "$env_file" "$1"
-        printf '%s=%q\n' "$1" "${ref}" >>"$env_file"
+        env::dotenv_delete -f "$__jdvlib_env_file" "$1"
+        printf '%s=%q\n' "$1" "${__jdvlib_ref}" >>"$__jdvlib_env_file"
         shift
     done
 }
