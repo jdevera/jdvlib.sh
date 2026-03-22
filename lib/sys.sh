@@ -13,6 +13,7 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/_meta.sh"
 meta::import ui
 meta::import func
 meta::import args
+meta::import user
 
 # jdvlib: --- END IMPORTS ---
 

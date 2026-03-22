@@ -9,20 +9,25 @@
 
 __JDVLIB_BUILD_DATE=${__JDVLIB_BUILD_DATE:-''}
 __JDVLIB_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+declare -gA __JDVLIB_IMPORTED
 
 # @description Import a library module by name.
 #   Sources the corresponding .sh file from the library directory.
 #   If the library is compiled into a single file, this is a no-op.
+#   Uses a guard to prevent double-sourcing of modules.
 #
 # @arg $1 string The module name to import (without .sh extension).
 #
 # @exitcode 0 Always succeeds.
 meta::import() {
-    local file="$1"
+    local file="${1%.sh}"
 
     if meta::lib_is_compiled; then
         return
     fi
+
+    [[ -v __JDVLIB_IMPORTED[$file] ]] && return 0
+    __JDVLIB_IMPORTED[$file]=1
 
     # shellcheck source=/dev/null
     source "${__JDVLIB_PATH}/${file}.sh"
