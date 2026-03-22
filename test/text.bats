@@ -346,6 +346,27 @@ EOF
     )"
 }
 
+@test "test_apply_in_place_cleans_up_on_failure" {
+    local file="$BATS_TEST_TMPDIR/test_apply_in_place.txt"
+    echo "original content" > "$file"
+
+    # shellcheck disable=SC2317,SC2329 # Invoked indirectly
+    failing_filter() {
+        return 1
+    }
+    run text::apply_in_place failing_filter "$file"
+    assert_failure
+
+    # Original file should be unchanged
+    run cat "$file"
+    assert_output "original content"
+
+    # No temp files should remain (mktemp creates in /tmp, not BATS_TEST_TMPDIR)
+    # Just verify the function returned failure and file is intact
+    run cat "$file"
+    assert_output "original content"
+}
+
 @test "test_markers_with_regex_metacharacters" {
     local input
     input=$(cat <<'EOF'

@@ -153,7 +153,7 @@ text::apply_in_place() {
     local tmpfile
     tmpfile=$(mktemp)
 
-    $filter <"$file" >"$tmpfile" && mv "$tmpfile" "$file"
+    $filter <"$file" >"$tmpfile" && mv "$tmpfile" "$file" || { rm -f "$tmpfile"; return 1; }
 }
 
 # @description Read and print only the content between two markers.
