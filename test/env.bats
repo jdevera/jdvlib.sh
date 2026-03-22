@@ -216,6 +216,27 @@ do_test_dotenv_delete() {
     assert_equal "excellent" "$MY_TEST_VAR2"
 }
 
+@test "test_dotenv_save_special_characters" {
+    cd "$BATS_TEST_TMPDIR"
+    echo "" > .env
+
+    local MY_TEST_VAR="hello world"
+    # shellcheck disable=SC2016 # Single quotes are intentional
+    local MY_TEST_VAR2='value with $pecial "chars"'
+
+    run env::dotenv_save MY_TEST_VAR MY_TEST_VAR2
+    assert_success
+
+    # Unset before reloading
+    unset MY_TEST_VAR MY_TEST_VAR2
+
+    run_light env::dotenv_load
+    assert_success
+    assert_equal "hello world" "$MY_TEST_VAR"
+    # shellcheck disable=SC2016 # Single quotes are intentional
+    assert_equal 'value with $pecial "chars"' "$MY_TEST_VAR2"
+}
+
 @test "test_dotenv_save_existing_entries" {
     cd "$BATS_TEST_TMPDIR"
     echo "MY_TEST_VAR=defo" > .env

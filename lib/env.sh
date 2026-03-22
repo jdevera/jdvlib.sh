@@ -82,7 +82,7 @@ env::dotenv_save() {
         local -n ref=$1
         # if the var exists, remove it from the file first
         env::dotenv_delete -f "$env_file" "$1"
-        echo "$1=${ref}" >>"$env_file"
+        printf '%s=%q\n' "$1" "${ref}" >>"$env_file"
         shift
     done
 }
