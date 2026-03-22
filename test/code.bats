@@ -35,3 +35,17 @@ teardown() {
     assert_success
     assert_output "sourced"
 }
+
+@test "test_is_sourced_via_symlink" {
+    local link="$BATS_TEST_TMPDIR/sourced_checker_link.sh"
+    ln -sf "$BATS_TEST_DIRNAME/scripts/sourced_checker.sh" "$link"
+    chmod +x "$link"
+
+    run "$link"
+    assert_success
+    assert_output "ran"
+
+    run source "$link"
+    assert_success
+    assert_output "sourced"
+}

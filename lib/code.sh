@@ -53,5 +53,5 @@ code::script_dir() {
 # @exitcode 0 If the script is being sourced.
 # @exitcode 1 If the script is being executed directly.
 code::is_sourced() {
-    [[ "${BASH_SOURCE[1]}" != "${0}" ]]
+    [[ "$(realpath "${BASH_SOURCE[1]}")" != "$(realpath "${0}")" ]]
 }
