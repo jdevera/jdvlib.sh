@@ -147,12 +147,24 @@ ansi::style() {
             --white-intense)    codes+=(97) ;;
 
             # 256-color foreground
-            --color=*)          codes+=(38 5 "${1#*=}") ;;
+            --color=*)
+                local val="${1#*=}"
+                if [[ $val =~ ^[0-9]+$ ]]; then
+                    codes+=(38 5 "$val")
+                else
+                    echo "ansi::style: invalid colour value '${1}'" >&2
+                fi
+                ;;
 
             # Truecolor foreground
             --rgb=*)
-                r=${1#*=}; b=${r##*,}; g=${r#*,}; g=${g%,*}; r=${r%%,*}
-                codes+=(38 2 "$r" "$g" "$b")
+                local val="${1#*=}"
+                if [[ $val =~ ^[0-9]+,[0-9]+,[0-9]+$ ]]; then
+                    r=${val%%,*}; b=${val##*,}; g=${val#*,}; g=${g%,*}
+                    codes+=(38 2 "$r" "$g" "$b")
+                else
+                    echo "ansi::style: invalid RGB value '${1}'" >&2
+                fi
                 ;;
 
             # Background colors
@@ -174,12 +186,24 @@ ansi::style() {
             --bg-white-intense)    codes+=(107) ;;
 
             # 256-color background
-            --bg-color=*)       codes+=(48 5 "${1#*=}") ;;
+            --bg-color=*)
+                local val="${1#*=}"
+                if [[ $val =~ ^[0-9]+$ ]]; then
+                    codes+=(48 5 "$val")
+                else
+                    echo "ansi::style: invalid colour value '${1}'" >&2
+                fi
+                ;;
 
             # Truecolor background
             --bg-rgb=*)
-                r=${1#*=}; b=${r##*,}; g=${r#*,}; g=${g%,*}; r=${r%%,*}
-                codes+=(48 2 "$r" "$g" "$b")
+                local val="${1#*=}"
+                if [[ $val =~ ^[0-9]+,[0-9]+,[0-9]+$ ]]; then
+                    r=${val%%,*}; b=${val##*,}; g=${val#*,}; g=${g%,*}
+                    codes+=(48 2 "$r" "$g" "$b")
+                else
+                    echo "ansi::style: invalid RGB value '${1}'" >&2
+                fi
                 ;;
 
             # Granular resets

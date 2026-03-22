@@ -111,6 +111,24 @@ teardown() {
     [[ "$output" == *$'\033[0m'* ]]
 }
 
+@test "test_style_invalid_color_warns" {
+    FORCE_COLOR=1 run ansi::style --color=abc "hello"
+    assert_success
+    [[ "$output" == *"invalid colour value"* ]]
+}
+
+@test "test_style_invalid_rgb_warns" {
+    FORCE_COLOR=1 run ansi::style --rgb=abc "hello"
+    assert_success
+    [[ "$output" == *"invalid RGB value"* ]]
+}
+
+@test "test_style_invalid_bg_color_warns" {
+    FORCE_COLOR=1 run ansi::style --bg-color=xyz "hello"
+    assert_success
+    [[ "$output" == *"invalid colour value"* ]]
+}
+
 @test "test_style_unknown_flag_warns" {
     FORCE_COLOR=1 run ansi::style --nonexistent "hello"
     assert_success
