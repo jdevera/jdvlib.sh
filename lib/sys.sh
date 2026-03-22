@@ -216,7 +216,7 @@ sys::run_as() {
     local user=$1
     shift
     local -a command=()
-    if [[ $USER == "$user" ]]; then
+    if [[ $(id -un) == "$user" ]]; then
         command=("$@")
     elif user::is_root; then
         command=(su - "$user" -c "$(printf '%q ' "$@")")
