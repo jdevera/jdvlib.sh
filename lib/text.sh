@@ -69,16 +69,14 @@ text::replace_inside_markers() {
     BEGIN {
         replacement_done=0
         output_enabled=1
-        start_pattern = "^" start "$"
-        end_pattern = "^" end "$"
     }
-    $0 ~ start_pattern {
+    $0 == start {
         print $0
         printContent()
         output_enabled=0
         replacement_done=1
     }
-    $0 ~ end_pattern {
+    $0 == end {
         output_enabled=1
     }
     output_enabled { print }
@@ -108,15 +106,12 @@ text::delete_inside_markers() {
     local end_delim="$2"
     shift 2
 
-    awk -v start="^$start_delim\$" -v end="^$end_delim\$" '
-    BEGIN { start_found = 0 }
-    $0 ~ start, $0 ~ end {   # if we are between the start and end markers
-        start_found = 1      # Remember that we found the start marker
-        if ($0 ~ start || $0 ~ end) print  # print the start and end markers
-        next                 # skip the rest of the lines
-    }
-    { print }                # print all other lines outside the markers
-    END { exit !start_found } # exit with 0 if we found the start marker
+    awk -v start="$start_delim" -v end="$end_delim" '
+    BEGIN { start_found = 0; inside = 0 }
+    $0 == start { start_found = 1; inside = 1; print; next }
+    $0 == end   { inside = 0; print; next }
+    !inside { print }
+    END { exit !start_found }
     ' "$@" && return 0 || return 1
 }
 
@@ -136,14 +131,12 @@ text::delete_around_markers() {
     local end_delim="$2"
     shift 2
 
-    awk -v start="^$start_delim\$" -v end="^$end_delim\$" '
-    BEGIN { start_found = 0 }
-    $0 ~ start, $0 ~ end {   # if we are between the start and end markers
-        start_found = 1      # Remember that we found the start marker
-        next                 # skip the rest of the lines
-    }
-    { print }                # print all other lines outside the markers
-    END { exit !start_found } # exit with 0 if we found the start marker
+    awk -v start="$start_delim" -v end="$end_delim" '
+    BEGIN { start_found = 0; inside = 0 }
+    $0 == start { start_found = 1; inside = 1; next }
+    $0 == end   { inside = 0; next }
+    !inside { print }
+    END { exit !start_found }
     ' "$@" && return 0 || return 1
 }
 
@@ -176,10 +169,11 @@ text::read_inside_markers() {
     local end_delim="$2"
     shift 2
 
-    awk -v start="^$start_delim\$" -v end="^$end_delim\$" '
-    $0 ~ start, $0 ~ end {
-        if ($0 !~ start && $0 !~ end) print
-    }
+    awk -v start="$start_delim" -v end="$end_delim" '
+    BEGIN { inside = 0 }
+    $0 == start { inside = 1; next }
+    $0 == end   { inside = 0; next }
+    inside { print }
     ' "$@"
 }
 
@@ -203,13 +197,10 @@ text::format_inside_markers() {
         -v end="$end_delim" \
         -v format="$format_str" \
         '
-    $0 ~ start, $0 ~ end {
-        if ($0 !~ start && $0 !~ end)
-            printf(format "\n", $0)
-        else
-            print
-        next
-    }
+    BEGIN { inside = 0 }
+    $0 == start { inside = 1; print; next }
+    $0 == end   { inside = 0; print; next }
+    inside { printf(format "\n", $0); next }
     { print }
     ' "$@"
 }
@@ -253,12 +244,12 @@ text::filter_inside_markers() {
     local inside_block=0
     local line
     while IFS= read -r line; do
-        if [[ $line =~ $start_delim ]]; then
+        if [[ $line == "$start_delim" ]]; then
             inside_block=1
             echo "$line"
             continue
         fi
-        if [[ $line =~ $end_delim ]]; then
+        if [[ $line == "$end_delim" ]]; then
             inside_block=0
             echo "$line"
             continue

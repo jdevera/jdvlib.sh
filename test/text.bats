@@ -346,6 +346,76 @@ EOF
     )"
 }
 
+@test "test_markers_with_regex_metacharacters" {
+    local input
+    input=$(cat <<'EOF'
+Before
+[section.start]
+content inside
+[section.end]
+After
+EOF
+    )
+
+    # delete_inside_markers
+    run text::delete_inside_markers '[section.start]' '[section.end]' <<<"$input"
+    assert_success
+    assert_line --index 0 "Before"
+    assert_line --index 1 "[section.start]"
+    assert_line --index 2 "[section.end]"
+    assert_line --index 3 "After"
+
+    # delete_around_markers
+    run text::delete_around_markers '[section.start]' '[section.end]' <<<"$input"
+    assert_success
+    assert_line --index 0 "Before"
+    assert_line --index 1 "After"
+
+    # read_inside_markers
+    run text::read_inside_markers '[section.start]' '[section.end]' <<<"$input"
+    assert_success
+    assert_output "content inside"
+
+    # replace_inside_markers
+    run text::replace_inside_markers '[section.start]' '[section.end]' "new content" <<<"$input"
+    assert_success
+    assert_line --index 1 "[section.start]"
+    assert_line --index 2 "new content"
+    assert_line --index 3 "[section.end]"
+
+    # format_inside_markers
+    run text::format_inside_markers '[section.start]' '[section.end]' '## %s' <<<"$input"
+    assert_success
+    assert_line --index 2 "## content inside"
+
+    # filter_inside_markers
+    # shellcheck disable=SC2317,SC2329
+    filter() { sed 's/content/REPLACED/'; }
+    run text::filter_inside_markers '[section.start]' '[section.end]' "filter" <<<"$input"
+    assert_success
+    assert_line --index 2 "REPLACED inside"
+}
+
+@test "test_filter_delimiter_substring_no_false_match" {
+    # Delimiter is a substring of a longer line — should NOT match
+    local input
+    input=$(cat <<'EOF'
+Before
+prefix #--START-- suffix
+actual content
+#--END--
+After
+EOF
+    )
+    # shellcheck disable=SC2317,SC2329
+    filter() { sed 's/actual/CHANGED/'; }
+    run text::filter_inside_markers '#--START--' '#--END--' "filter" <<<"$input"
+    assert_success
+    # The line with "prefix #--START-- suffix" should NOT trigger the block
+    assert_line --index 1 "prefix #--START-- suffix"
+    assert_line --index 2 "actual content"
+}
+
 @test "test_filter_inside_markers_preserves_indentation" {
     local input
     input=$(cat <<'EOF'
