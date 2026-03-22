@@ -268,7 +268,7 @@ fake_uname() {
 }
 
 @test "test_ensure_linux_macos" {
-    # shellcheck disable=SC2317 # This is mocking the command
+    # shellcheck disable=SC2317,SC2329 # This is mocking the command
     uname() {
         fake_uname "$@"
     }
@@ -299,6 +299,40 @@ fake_uname() {
     test_ensure_function sys::ensure_linux \
         --failure \
             "This is intended to run on a Linux system"
+}
+
+@test "test_macos_code_name" {
+    # Mock uname to report macOS
+    # shellcheck disable=SC2317,SC2329 # Invoked indirectly via export -f
+    uname() { echo Darwin; }
+    export -f uname
+    register_teardown "unset -f uname"
+
+    local __test_sw_vers_answer=""
+    # shellcheck disable=SC2317,SC2329 # Invoked indirectly via export -f
+    sw_vers() { echo "$__test_sw_vers_answer"; }
+    export -f sw_vers
+    register_teardown "unset -f sw_vers"
+
+    # shellcheck disable=SC2031,SC2030
+    export __test_sw_vers_answer="14.3.1"
+    run sys::macos_code_name
+    assert_success
+    assert_output "Sonoma"
+
+    export __test_sw_vers_answer="15.1"
+    run sys::macos_code_name
+    assert_success
+    assert_output "Sequoia"
+
+    export __test_sw_vers_answer="16.0"
+    run sys::macos_code_name
+    assert_success
+    assert_output "Tahoe"
+
+    export __test_sw_vers_answer="99.0"
+    run sys::macos_code_name
+    assert_failure
 }
 
 @test "test_is_docker_host" {

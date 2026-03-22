@@ -199,6 +199,8 @@ sys::macos_code_name() {
         12*) echo "Monterey" ;;
         13*) echo "Ventura" ;;
         14*) echo "Sonoma" ;;
+        15*) echo "Sequoia" ;;
+        16*) echo "Tahoe" ;;
         *)
             echo "Unknown macOS version: $version"
             return 1
