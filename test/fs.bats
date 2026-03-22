@@ -84,7 +84,25 @@ teardown() {
     assert_success
 }
 
+@test "test_is_in_remote_mount_fails_on_macos" {
+    sys::is_macos || skip "macOS-only test"
+    run fs::is_in_remote_mount /tmp
+    assert_failure
+}
+
 @test "test_is_in_remote_mount" {
+
+    # Mock uname so we appear to be on Linux
+    # shellcheck disable=SC2317,SC2329
+    uname() {
+        if [[ $1 == -s ]]; then
+            echo Linux
+        else
+            command uname "$@"
+        fi
+    }
+    export -f uname
+    register_teardown "unset -f uname"
 
     fake_mount="$BATS_TEST_TMPDIR/fake_mount"
     dir="$fake_mount/a/b/c"
