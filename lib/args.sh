@@ -108,19 +108,19 @@ args::flag_value() {
 #   # If the script is called with args: a --flag b c d, the above code will set
 #   # flag_found to true and rest_args to (a b c d)
 args::get_flag_value() {
-    local flag=$1
+    local __jdvlib_flag=$1
     local -n __jdvlib_dest=$2
     local -n __jdvlib_args=$3
     shift 3
     __jdvlib_args=()
-    local found=false
+    local __jdvlib_found=false
     while [[ $# -gt 0 ]]; do
-        if [[ "$1" == "$flag" ]]; then
-            found=true
+        if [[ "$1" == "$__jdvlib_flag" ]]; then
+            __jdvlib_found=true
         else
             __jdvlib_args+=("$1")
         fi
         shift
     done
-    __jdvlib_dest=$found
+    __jdvlib_dest=$__jdvlib_found
 }

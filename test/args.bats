@@ -196,3 +196,23 @@ do_test_get_flag_value() {
 @test "test_get_flag_value_only_flag" {
     do_test_get_flag_value true "" --flag
 }
+
+@test "test_get_flag_value_dest_named_found" {
+    # Verify no nameref collision when caller uses 'found' as dest variable
+    local found
+    local -a rest
+    run_light args::get_flag_value --flag found rest --flag a b
+    assert_success
+    assert [ "$found" == "true" ]
+    assert [ "${rest[*]}" == "a b" ]
+}
+
+@test "test_get_flag_value_dest_named_flag" {
+    # Verify no nameref collision when caller uses 'flag' as dest variable
+    local flag
+    local -a rest
+    run_light args::get_flag_value --myflag flag rest --myflag x
+    assert_success
+    assert [ "$flag" == "true" ]
+    assert [ "${rest[*]}" == "x" ]
+}
